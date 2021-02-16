@@ -2,6 +2,7 @@
 # Author: Giang Le
 # Bash script to retrieve data from different websites, provided by WMT 2020.
 # Small data set for Checkpoint 1: Reuters data from https://www2.nict.go.jp/astrec-att/member/mutiyama/jea/reuters/ (50k sentences)
+# Usage: sh get_data.sh -c paracrawl
 
 DIR=`dirname "$0"`
 BASE=$DIR/..
