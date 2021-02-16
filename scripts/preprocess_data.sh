@@ -31,7 +31,6 @@ LC_TEST_EN=$(wc -l < $BASE/data/test-en-raw.txt)
 LC_TEST_JA=$(wc -l < $BASE/data/test-ja-raw.txt)
 else
 	echo "Skipping Reuters data processing because no data were found."
-	exit
 fi
 #echo "Preparing Kyoto Free Translation Task data as test data..."
 #tar -xzf $BASE/data/kyoto-en-ja.tar.gz
@@ -73,7 +72,6 @@ LC_TEST_PARA_JA=$(wc -l < $BASE/data/test-para-ja-raw.txt)
 
 else
 	echo "Skipping Paracrawl data processing because no data were found."
-	exit
 fi
 
 echo "Total number of JA REUTERS TRAIN sentences is $LC_TRAIN_JA"
