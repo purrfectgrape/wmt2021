@@ -32,6 +32,7 @@ if [ -f $BASE/data/paracrawl-en-ja.tar.gz ]; then
 echo "Unzip Paracrawl. See data/paracrawl-en-ja.txt for the data"
 tar -xzf $BASE/data/paracrawl-en-ja.tar.gz
 mv $BASE/scripts/en-ja/en-ja.bicleaner05.txt $BASE/data/paracrawl-en-ja.txt
+python3 $BASE/scripts/prepare_paracrawl_sents.py $BASE/data/paracrawl-en-ja.txt $BASE/data/raw/paracrawl-ja.txt $BASE/data/raw/paracrawl-en.txt
 rm -rf $BASE/scripts/en-ja
 #cut -f2,3 $BASE/data/paracrawl-en-ja.txt > $BASE/data/raw/paracrawl-en.txt
 ##awk -F'\t' '$1 >= 0.777' $BASE/data/paracrawl-en-raw.txt | cut -f2 > $BASE/data/paracrawl-en-shortened.txt
@@ -40,3 +41,7 @@ rm -rf $BASE/scripts/en-ja
 else
     echo "Skipping Paracrawl data processing because no data were found."
 fi
+
+echo "Getting 5000 sents each for ja and en"
+cat $BASE/data/raw/reuters-en.txt $BASE/data/raw/paracrawl-en.txt | shuf -n 5000 > $BASE/data/raw/small-en.txt
+cat $BASE/data/raw/reuters-ja.txt $BASE/data/raw/paracrawl-ja.txt | shuf -n 5000 > $BASE/data/raw/small-ja.txt
