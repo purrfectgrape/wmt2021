@@ -10,7 +10,7 @@ echo "Preparing reuters data as train data..."
 gunzip $BASE/data/reuters-ja-en.txt.gz
 iconv -f EUC-JP -t UTF-8 < $BASE/data/reuters-ja-en.txt > $BASE/data/reuters-ja-en-decoded.txt
 
-python3 $BASE/scripts/prepare_sents.py $BASE/data/reuters-ja-en-decoded.txt $BASE/data/reuters-ja-total.txt $BASE/data/reuters-en-total.txt
+python3 $BASE/scripts/prepare_reuters_sents.py $BASE/data/reuters-ja-en-decoded.txt $BASE/data/reuters-ja-total.txt $BASE/data/reuters-en-total.txt
 cat $BASE/data/reuters-ja-total.txt | head -n 50000 > $BASE/data/train-ja-raw.txt
 cat $BASE/data/reuters-en-total.txt | head -n 50000 > $BASE/data/train-en-raw.txt
 LC_TRAIN_EN=$(wc -l < $BASE/data/train-en-raw.txt)
