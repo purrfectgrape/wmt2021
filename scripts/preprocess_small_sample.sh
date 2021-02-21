@@ -31,8 +31,8 @@ fi
 if [ -f $BASE/data/paracrawl-en-ja.tar.gz ]; then
 echo "Unzip Paracrawl. See data/paracrawl-en-ja.txt for the data"
 tar -xzf $BASE/data/paracrawl-en-ja.tar.gz
-mv $BASE/en-ja/en-ja.bicleaner05.txt $BASE/data/paracrawl-en-ja.txt
-rm -rf $BASE/en-ja
+mv $BASE/scripts/en-ja/en-ja.bicleaner05.txt $BASE/data/paracrawl-en-ja.txt
+rm -rf $BASE/scripts/en-ja
 #cut -f2,3 $BASE/data/paracrawl-en-ja.txt > $BASE/data/raw/paracrawl-en.txt
 ##awk -F'\t' '$1 >= 0.777' $BASE/data/paracrawl-en-raw.txt | cut -f2 > $BASE/data/paracrawl-en-shortened.txt
 #cut -f2,4 $BASE/data/paracrawl-en-ja.txt > $BASE/data/raw/paracrawl-ja.txt

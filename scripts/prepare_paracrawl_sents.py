@@ -10,8 +10,8 @@ import sys
 
 data_dir = os.getcwd() + "/data"
 
-if not len(sys.argv) == 4:
-    raise SystemExit("Usage: {} input_file ja_outfile en_outfile".format(sys.argv[0]))
+if not len(sys.argv) == 3:
+    raise SystemExit("Usage: {} input_file output_file".format(sys.argv[0]))
 
 if not "paracrawl-en-ja.txt" in sys.argv[1]:
     raise SystemExit("The first parameter contains paracrawl-en-ja.txt")
@@ -22,24 +22,23 @@ if not "paracrawl-en-ja.txt" in sys.argv[1]:
 # Column 3: English sentences
 # Column 4: Japanese sentences.
 
-# Create a dictionary, using the English as key.
-def create_sent_lists(filename):
-    ja_sents = []
-    en_sents = []
+# Create a dictionary, using the English and score as key, the value will the Japanese counterpart.
+def create_dict(filename):
+    d = {}
     with open(filename) as infile:
         for line in infile:
-            ja_sents.append(re.findall(r"<J>(.*?)</J>", line))
-            en_sents.append(re.findall(r"<E>(.*?)</E>", line))
-        return ja_sents, en_sents
+            (web, score, en, ja) = line.split("\t")
+            d[(en, score, web)] = ja
+    return d
 
-def write_to_file(filename, sent_list):
-    with open(filename, "w") as outfile:
-        for sent in sent_list:
-            for s in sent:
-                outfile.write(s + "\n")
+# Choose only the best aligned sentence pairs to write to file.
+def write_to_file(outfile, sents_dict):
+    with open(outfile,"w") as out:
+        for k in sents_dict.keys():
+            if float(k[1]) > 0.790:
+                out.write(k[0] + "\t" + sents_dict[k] + "\n")
     
-ja_outfile = sys.argv[2]
-en_outfile = sys.argv[3]
-ja_sents, en_sents = create_sent_lists(sys.argv[1])
-write_to_file(ja_outfile, ja_sents)
-write_to_file(en_outfile, en_sents)
+if __name__ == "__main__":
+    outfile = sys.argv[2]
+    mydict = create_dict(sys.argv[1])
+    write_to_file(outfile, mydict)
