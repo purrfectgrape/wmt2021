@@ -1,22 +1,36 @@
 # wmt2021
 Repository for WMT 2021
 
-# Get Data
-./scripts/get_data.sh -c paracrawl
+# For a toy model
 ./scripts/get_data.sh -c reuters
-
-# To create small corpora
-./scripts/preprocess_small_sample.sh
 
 # Unzipping data and splitting to train, dev, test
 ./scripts/preprocess_data.sh
 
-Once the script finishes running you should get the following sentence count:
-Total number of JA PARACRAWL TRAIN sentences is 1292000
-Total number of EN PARACRAWL TRAIN sentences is 1292000
-Total number of JA PARACRAWL DEV sentences is 5000
-Total number of EN PARACRAWL DEV sentences is 5000
-Total number of JA PARACRAWL TEST sentences is 2373
-Total number of EN PARACRAWL TEST sentences is 2373
+# Installation
+./scripts/install_libraries.sh
 
-# Process Paracrawl data
+# Process English
+./scripts/process_en.sh -c train
+
+./scripts/process_en.sh -c dev
+
+./scripts/process_en.sh -c test
+
+./scripts/copy_en.sh
+
+
+# Process Japanese (baseline and experiment)
+Would fail in qivalluk server because of missing libraries
+
+./scripts/process_ja.sh -c train-bl
+
+./scripts/process_ja.sh -c dev-bl
+
+./scripts/process_ja.sh -c test-bl
+
+# Process training data in parallel
+./scripts/parallel_processing.sh -c train-bl
+
+# Build vocab
+./scripts/build_vocab.sh -c bl
