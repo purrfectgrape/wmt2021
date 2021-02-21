@@ -20,7 +20,7 @@ Repository for WMT 2021
 ./scripts/copy_en.sh
 
 
-# Process Japanese (baseline and experiment)
+# Process Japanese
 Would fail in qivalluk server because of missing libraries
 
 ./scripts/process_ja.sh -c train-bl
