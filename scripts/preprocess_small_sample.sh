@@ -50,14 +50,34 @@ if [ -f $BASE/data/wikimatrix-en-ja.tsv.gz ]; then
 echo "Use extract_wikimatrix.py..."
 python3 scripts/extract_wikimatrix.py --tsv data/wikimatrix-en-ja.tsv.gz --src-lang en --trg-lang ja --threshold 1.04 --bitext data/raw/wikimatrix.en-ja.txt
 else
-echo "Skipping Wikimatrix data processing because no data were found."
+    echo "Skipping Wikimatrix data processing because no data were found."
 fi
 
 if [ -f $BASE/data/newscommentary-en-ja.tsv.gz ]; then
-echo "Unzip newscommentary"
+    echo "Unzip newscommentary"
 gunzip $BASE/data/newscommentary-en-ja.tsv.gz
 cut -f1 $BASE/data/newscommentary-en-ja.tsv > $BASE/raw/newscommentary.en
 cut -f2 $BASE/data/newscommentary-en-ja.tsv > $BASE/raw/newscommentary.ja
 else
-echo "Skipping Wikimatrix data processing because no data were found."
+    echo "Skipping news-commentary data processing because no data were found."
 fi
+
+echo "Sents count check"
+LC_PARACRAWL_JA=$(wc -l < $BASE/data/raw/paracrawl.ja)
+LC_PARACRAWL_EN=$(wc -l < $BASE/data/raw/paracrawl.en)
+LC_REUTERS_JA=$(wc -l < $BASE/data/raw/reuters.ja)
+LC_REUTERS_EN=$(wc -l < $BASE/data/raw/reuters.en)
+LC_WIKIMATRIX_JA=$(wc -l < $BASE/data/raw/wikimatrix.en-ja.txt.ja)
+LC_WIKIMATRIX_EN=$(wc -l < $BASE/data/raw/wikimatrix.en-ja.txt.en)
+LC_NEWSCOM_JA=$(wc -l < $BASE/data/raw/newscommentary.ja)
+LC_NEWSCOM_EN=$(wc -l < $BASE/data/raw/newscommentary.en)
+
+echo "PARACRAWL JA: $LC_PARACRAWL_JA"
+echo "PARACRAWL EN: $LC_PARACRAWL_EN"
+echo "REUTERS JA: $LC_REUTERS_JA"
+echo "REUTERS EN: $LC_REUTERS_EN"
+echo "WIKIMATRIX JA: $LC_WIKIMATRIX_JA"
+echo "WIKIMATRIX EN: $LC_WIKIMATRIX_EN"
+echo "NEWSCOM JA: $LC_NEWSCOM_JA"
+echo "NEWSCOM EN: $LC_NEWSCOM_EN"
+
