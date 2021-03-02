@@ -87,6 +87,7 @@ while getopts ":c:" opt; do
           echo "Retrieving corpus from: $OPTARG" >&2
           wget http://www.kecl.ntt.co.jp/icl/lirg/jparacrawl/release/2.0/bitext/en-ja.tar.gz
           mv en-ja.tar.gz $BASE/data/paracrawl-en-ja.tar.gz
+	  rm -rf en-ja.tar.gz
 	  if [ -f $BASE/data/paracrawl-en-ja.tar.gz ]; then
     		echo "Data successfully downloaded."
 	  else

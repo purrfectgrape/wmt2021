@@ -8,7 +8,7 @@ import re
 import os
 import sys
 
-os.chdir("..")
+#os.chdir("..")
 data_dir = os.getcwd() + "/data"
 
 if not len(sys.argv) == 4:
@@ -36,7 +36,7 @@ def create_dict(filename):
 def write_to_file(outfile, sents_dict):
     with open(outfile,"w") as out:
         for k in sents_dict.keys():
-            if float(k[1]) > 0.790:
+            if float(k[1]) > 0.730:
                 out.write("{}\t{}\n".format(k[0], sents_dict[k]))
 
 # Create a list of Japanese sentences and English sentences

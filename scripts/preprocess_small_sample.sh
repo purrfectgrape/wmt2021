@@ -31,7 +31,7 @@ fi
 if [ -f $BASE/data/paracrawl-en-ja.tar.gz ]; then
 echo "Unzip Paracrawl. See data/paracrawl-en-ja.txt for the data"
 tar -xzf $BASE/data/paracrawl-en-ja.tar.gz
-mv $BASE/scripts/en-ja/en-ja.bicleaner05.txt $BASE/data/paracrawl-en-ja.txt
+mv $BASE/en-ja/en-ja.bicleaner05.txt $BASE/data/paracrawl-en-ja.txt
 python3 $BASE/scripts/prepare_paracrawl_sents.py $BASE/data/paracrawl-en-ja.txt $BASE/data/raw/paracrawl-ja.txt $BASE/data/raw/paracrawl-en.txt
 rm -rf $BASE/scripts/en-ja
 #cut -f2,3 $BASE/data/paracrawl-en-ja.txt > $BASE/data/raw/paracrawl-en.txt
