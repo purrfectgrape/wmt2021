@@ -42,6 +42,13 @@ else
     echo "Skipping Paracrawl data processing because no data were found."
 fi
 
-echo "Getting 5000 sents each for ja and en"
-cat $BASE/data/raw/reuters-en.txt $BASE/data/raw/paracrawl-en.txt | shuf -n 5000 > $BASE/data/raw/small-en.txt
-cat $BASE/data/raw/reuters-ja.txt $BASE/data/raw/paracrawl-ja.txt | shuf -n 5000 > $BASE/data/raw/small-ja.txt
+#echo "Getting 5000 sents each for ja and en"
+#cat $BASE/data/raw/reuters-en.txt $BASE/data/raw/paracrawl-en.txt | shuf -n 5000 > $BASE/data/raw/small-en.txt
+#cat $BASE/data/raw/reuters-ja.txt $BASE/data/raw/paracrawl-ja.txt | shuf -n 5000 > $BASE/data/raw/small-ja.txt
+
+if [ -f $BASE/data/wikimatrix-en-ja.tsv.gz ]; then
+echo "Use extract_wikimatrix.py..."
+python3 scripts/extract_wikimatrix.py --tsv data/wikimatrix-en-ja.tsv.gz --src-lang en --trg-lang ja --threshold 1.04 --bitext data/raw/wikimatrix.en-ja.txt
+else
+echo "Skipping Wikimatrix data processing because no data were found."
+fi
