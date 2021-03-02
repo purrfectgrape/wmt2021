@@ -34,5 +34,3 @@ if __name__ == '__main__':
     for prediction_k, prediction_v in predictions.items():
         if prediction_v[1] < opts.score and opts.lang in prediction_v[0][0]:
             print(prediction_k, prediction_v)
-
-
