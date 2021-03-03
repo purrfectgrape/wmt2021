@@ -49,6 +49,8 @@ fi
 if [ -f $BASE/data/wikimatrix-en-ja.tsv.gz ]; then
 echo "Use extract_wikimatrix.py..."
 python3 scripts/extract_wikimatrix.py --tsv $BASE/data/wikimatrix-en-ja.tsv.gz --src-lang en --trg-lang ja --threshold 1.025 --bitext $BASE/data/raw/wikimatrix.en-ja.txt
+mv $BASE/data/raw/wikimatrix.en-ja.txt.ja $BASE/data/raw/wikimatrix.ja
+mv $BASE/data/raw/wikimatrix.en-ja.txt.en $BASE/data/raw/wikimatrix.en
 else
     echo "Skipping Wikimatrix data processing because no data were found."
 fi
