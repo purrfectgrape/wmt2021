@@ -48,7 +48,7 @@ fi
 
 if [ -f $BASE/data/wikimatrix-en-ja.tsv.gz ]; then
 echo "Use extract_wikimatrix.py..."
-python3 scripts/extract_wikimatrix.py --tsv data/wikimatrix-en-ja.tsv.gz --src-lang en --trg-lang ja --threshold 1.04 --bitext data/raw/wikimatrix.en-ja.txt
+python3 scripts/extract_wikimatrix.py --tsv $BASE/data/wikimatrix-en-ja.tsv.gz --src-lang en --trg-lang ja --threshold 1.025 --bitext $BASE/data/raw/wikimatrix.en-ja.txt
 else
     echo "Skipping Wikimatrix data processing because no data were found."
 fi
@@ -56,8 +56,8 @@ fi
 if [ -f $BASE/data/newscommentary-en-ja.tsv.gz ]; then
     echo "Unzip newscommentary"
 gunzip $BASE/data/newscommentary-en-ja.tsv.gz
-cut -f1 $BASE/data/newscommentary-en-ja.tsv > $BASE/raw/newscommentary.en
-cut -f2 $BASE/data/newscommentary-en-ja.tsv > $BASE/raw/newscommentary.ja
+cut -f 1 $BASE/data/newscommentary-en-ja.tsv > $BASE/data/raw/newscommentary.en
+cut -f 2 $BASE/data/newscommentary-en-ja.tsv > $BASE/data/raw/newscommentary.ja
 else
     echo "Skipping news-commentary data processing because no data were found."
 fi
