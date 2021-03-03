@@ -6,11 +6,11 @@
 import fasttext
 import optparse
 import sys
-import pathlib
+#import pathlib
 
 optparser = optparse.OptionParser()
-optparser.add_option("-a", "--input_one", dest="input_one", default="{pathlib.Path(__file__).parent.absolute()}/data/raw/paracrawl.en", help="File containing sentences to get lang-id of (default=data/raw/paracrawl.en)")
-optparser.add_option("-b", "--input_two", dest="input_two", default="{pathlib.Path(__file__).parent.absolute()}/data/raw/paracrawl.ja", help="File containing sentences to get lang-id of (default=data/raw/paracrawl.ja)")
+optparser.add_option("-a", "--input_one", dest="input_one", default="data/raw/paracrawl.en", help="File containing sentences to get lang-id of (default=data/raw/paracrawl.en)")
+optparser.add_option("-b", "--input_two", dest="input_two", default="data/raw/paracrawl.ja", help="File containing sentences to get lang-id of (default=data/raw/paracrawl.ja)")
 optparser.add_option("-n", "--num_sentences", dest="num_sents", default=sys.maxsize, type="int", help="Number of sentences, default=no limit)")
 optparser.add_option("-s", "--conf_score", dest="score", default=0.9, type="float", help="Confidence score of prediction, default=0.9)")
 opts = optparser.parse_args()[0]
@@ -21,11 +21,19 @@ class LanguageIdentification:
         pretrained_model = "/tmp/lid.176.bin"
         self.model = fasttext.load_model(pretrained_model)
 
+   # def remove_bad_chars(self, file_one, file_two):
+   #     with open(file_one) as f1:
+   #         for line in f1:
+   #             line=line.decode("utf-8","ignore").encode("utf-8")
+   #     with open(file_two) as f2:
+   #         for line in f2:
+   #             line=line.decode("utf-8","ignore").encode("utf-8")
+
     def predict_lang(self, file_one, file_two):
         parallel_predictions = {}
         with open(file_one) as f1, open(file_two) as f2:
             for x, y in zip(f1, f2):
-                parallel_predictions[(x,y)] = (self.model.predict(x.strip()), self.model.predict(y.strip()))
+                parallel_predictions[(x,y)] = (self.model.predict(x.decode('utf-8').strip()), self.model.predict(y.decode('utf-8').strip()))
         return parallel_predictions
         
     def filter(self, predictions, file_one, file_two, score):
@@ -37,6 +45,7 @@ class LanguageIdentification:
 
 if __name__ == '__main__':
     LANGUAGE = LanguageIdentification()
+    #LANGUAGE.remove_bad_chars(opts.input_one, opts.input_two)
     predictions = LANGUAGE.predict_lang(opts.input_one, opts.input_two)
     LANGUAGE.filter(predictions, opts.input_one, opts.input_two, opts.score)
 
