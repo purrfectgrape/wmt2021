@@ -33,7 +33,7 @@ done
 # Checking parallel files
 echo "LINES COUNT CHECK - PARALLEL LC MUST BE EQUAL!"
 echo "##############################################"
-for c in wikimatrix paracrawl newscommentary reuters; do
+for c in wikimatrix paracrawl newscommentary reuters newsdev2020; do
     echo "corpus: " $c
     wc -l $BASE/data/preprocessed/$c-tok.en
     wc -l $BASE/data/raw/$c-filtered.ja
