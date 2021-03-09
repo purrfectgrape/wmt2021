@@ -1,109 +1,57 @@
 #! /bin/bash
 # Author: Giang Le
-# Bash script to retrieve data from different websites, provided by WMT 2020.
-# Small data set for Checkpoint 1: Reuters data from https://www2.nict.go.jp/astrec-att/member/mutiyama/jea/reuters/ (50k sentences)
+# Date: Mar 9, 2021.
+# Bash script to retrieve the available datasets for the Japanese-English language pair,
+# provided by the WMT 2021's organizers.
 # Usage: sh get_data.sh -c paracrawl
 
 DIR=`dirname "$0"`
 BASE=$DIR/..
 
-if [ ! -d $BASE/data ]; then
-  mkdir $BASE/data
+# Check number of required arguments.
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 $1" 1>&2
+    exit 1
 fi
 
-while getopts ":c:" opt; do
-  case $opt in
-    c)
-      case $OPTARG in
-        reuters)
-          echo "Retrieving corpus from: $OPTARG" >&2
-          wget https://www2.nict.go.jp/astrec-att/member/mutiyama/jea/$OPTARG/reuters-je-11.txt.gz
-          mv reuters-je-11.txt.gz $BASE/data/reuters-ja-en.txt.gz
-	  rm -rf en-ja
-	  if [ -f $BASE/data/reuters-ja-en.txt.gz ]; then
-    		echo "Data successfully downloaded."
-	  else
-    		echo "Data not successfully downloaded."
-    	  exit
-	  fi
-          ;;
-        wikimatrix)
-          echo "Retrieving corpus from: $OPTARG" >&2
-          wget http://data.statmt.org/wmt20/translation-task/WikiMatrix/WikiMatrix.v1.en-ja.langid.tsv.gz
-          mv WikiMatrix.v1.en-ja.langid.tsv.gz $BASE/data/wikimatrix-en-ja.tsv.gz
-	  if [ -f $BASE/data/wikimatrix-en-ja.tsv.gz ]; then
-    		echo "Data successfully downloaded."
-	  else
-    		echo "Data not successfully downloaded."
-    	  exit
-	  fi
-          ;;
-        kyoto)
-          echo "Retrieving corpus from: $OPTARG" >&2
-          wget http://www.phontron.com/kftt/download/kftt-data-1.0.tar.gz
-          mv kftt-data-1.0.tar.gz $BASE/data/kyoto-en-ja.tar.gz
-          rm -rf kftt-data-1.0
-	  if [ -f $BASE/data/kyoto-en-ja.tar.gz ]; then
-    		echo "Data successfully downloaded."
-	  else
-    		echo "Data not successfully downloaded."
-    	  exit
-	  fi
-          ;;
-        newscommentary)
-          echo "Retrieving corpus from: $OPTARG" >&2
-          wget http://data.statmt.org/news-commentary/v15/training/news-commentary-v15.en-ja.tsv.gz
-          mv news-commentary-v15.en-ja.tsv.gz $BASE/data/newscommentary-en-ja.tsv.gz
-	  if [ -f $BASE/data/newscommentary-en-ja.tsv.gz ]; then
-    		echo "Data successfully downloaded."
-	  else
-    		echo "Data not successfully downloaded."
-    	  exit
-	  fi
-          ;;
-        wikititles)
-          echo "Retrieving corpus from: $OPTARG" >&2
-          wget http://data.statmt.org/wikititles/v2/wikititles-v2.ja-en.tsv.gz
-          mv wikititles-v2.ja-en.tsv.gz $BASE/data/wikititles-ja-en.tsv.gz
-	  if [ -f $BASE/data/wikititles-ja-en.tsv.gz ]; then
-    		echo "Data successfully downloaded."
-	  else
-    		echo "Data not successfully downloaded."
-    	  exit
-	  fi
-          ;;
-        subtitles)
-          echo "Retrieving corpus from: $OPTARG" >&2
-          wget https://nlp.stanford.edu/projects/jesc/raw.tar.gz
-          mv raw.tar.gz $BASE/data/subtitles-en-ja.tar.gz
-	  if [ -f $BASE/data/subtitles-en-ja.tar.gz ]; then
-    		echo "Data successfully downloaded."
-	  else
-    		echo "Data not successfully downloaded."
-    	  exit
-	  fi
-          ;;
-        paracrawl)
-          echo "Retrieving corpus from: $OPTARG" >&2
-          wget http://www.kecl.ntt.co.jp/icl/lirg/jparacrawl/release/2.0/bitext/en-ja.tar.gz
-          mv en-ja.tar.gz $BASE/data/paracrawl-en-ja.tar.gz
-	  rm -rf en-ja.tar.gz
-	  if [ -f $BASE/data/paracrawl-en-ja.tar.gz ]; then
-    		echo "Data successfully downloaded."
-	  else
-    		echo "Data not successfully downloaded."
-    	  exit
-	  fi
-          ;;
-        *)
-          echo "Available data are reuters, wikimatrix, kyoto, newscommentary, wikititles, subtitles, paracrawl."
-          ;;
-      esac
-      ;;
-    \?)
-      echo "Usage: cmd [-c]"
-      echo "Available data are reuters, wikimatrix, kyoto, newscommentary, wikititles, subtitles, paracrawl."
-      ;;
-  esac
-done
+# Make a new wmt2021 directory if it hasn't existed before.
+if [ ! -d $BASE/data/wmt2021 ]; then
+  mkdir $BASE/data/wmt2021
+fi
 
+# Function to download datasets and unzip them.
+function download {
+    wget $(data_loc $1)
+}
+
+function data_loc {
+    if [ $1 = "reuters" ]; then
+        echo "https://www2.nict.go.jp/astrec-att/member/mutiyama/jea/reuters/reuters-je-11.txt.gz"
+    fi
+    if [ $1 = "wikimatrix" ]; then
+        echo "http://data.statmt.org/wmt20/translation-task/WikiMatrix/WikiMatrix.v1.en-ja.langid.tsv.gz"
+    fi
+    if [ $1 = "kftt" ]; then
+        echo "http://www.phontron.com/kftt/download/kftt-data-1.0.tar.gz"
+    fi
+    if [ $1 = "ted" ]; then
+        echo "https://wit3.fbk.eu/archive/2017-01-trnted//texts/en/ja/en-ja.tgz"
+    fi
+    if [ $1 = "newscommentary" ]; then
+        echo "http://data.statmt.org/news-commentary/v15/training/news-commentary-v15.en-ja.tsv.gz"
+    fi
+    if [ $1 = "wikititles" ]; then
+        echo "http://data.statmt.org/wikititles/v2/wikititles-v2.ja-en.tsv.gz"
+    fi
+    if [ $1 = "subtitles" ]; then
+        echo "https://nlp.stanford.edu/projects/jesc/data/split.tar.gz"
+    fi
+    if [ $1 = "paracrawl" ]; then
+        echo "http://www.kecl.ntt.co.jp/icl/lirg/jparacrawl/release/2.0/bitext/en-ja.tar.gz"
+    fi
+    if [ $1 = "commoncrawl" ]; then
+        echo "http://web-language-models.s3-website-us-east-1.amazonaws.com/ngrams/ja/deduped/ja.deduped.xz"
+    fi
+}
+
+download $1
