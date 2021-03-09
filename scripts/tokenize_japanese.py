@@ -16,8 +16,8 @@ data_dir = os.getcwd() + "/data/raw/"
 if not len(sys.argv) == 2:
     raise SystemExit("Usage: {} type".format(sys.argv[0]))
 
-if not ("newsdev" in sys.argv[1] or "reuters" in sys.argv[1] or "paracrawl" in sys.argv[1] or "wikimatrix" in sys.argv[1] or "newscommentary" in sys.argv[1] or "corpus_mid" in sys.argv[1]):
-    raise SystemExit("Type of file must be newsdev, reuters, wikimatrix, newscommentary, paracrawl, or corpus_mid")
+if not ("dev/newsdev2020-filtered" in sys.argv[1] or "reuters" in sys.argv[1] or "paracrawl" in sys.argv[1] or "wikimatrix" in sys.argv[1] or "newscommentary" in sys.argv[1] or "corpus_mid" in sys.argv[1]):
+    raise SystemExit("Type of file must be dev/newsdev2020-filtered, reuters, wikimatrix, newscommentary, paracrawl, or corpus_mid")
 
 def create_lines(file):
     lines = []

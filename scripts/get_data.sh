@@ -3,14 +3,14 @@
 # Date: Mar 9, 2021.
 # Bash script to retrieve the available datasets for the Japanese-English language pair,
 # provided by the WMT 2021's organizers.
-# Usage: sh get_data.sh -c paracrawl
+# Usage: sh get_data.sh paracrawl
 
 DIR=`dirname "$0"`
 BASE=$DIR/..
 
 # Check number of required arguments.
 if [ $# -ne 1 ]; then
-    echo "Usage: $0 $1" 1>&2
+    echo "Usage: $0 corpus_name" 1>&2
     exit 1
 fi
 
@@ -21,10 +21,17 @@ fi
 
 # Function to download datasets and unzip them.
 function download {
-    wget $(data_loc $1)
+    echo "Downloading $1 corpus..."
+    wget $(data_loc $1) -P $BASE/data/wmt2021
+    echo "Unzipping $1 corpus..."
+    FILENAME=$(basename $(data_loc $1))
+    tar -xf $BASE/data/wmt2021/$FILENAME --directory $BASE/data/wmt2021
+    echo "Done! Check in $BASE/data/wmt2021 for the downloaded data"
 }
 
+# Datasets and URLs.
 function data_loc {
+    # parallel training data
     if [ $1 = "reuters" ]; then
         echo "https://www2.nict.go.jp/astrec-att/member/mutiyama/jea/reuters/reuters-je-11.txt.gz"
     fi
@@ -49,9 +56,18 @@ function data_loc {
     if [ $1 = "paracrawl" ]; then
         echo "http://www.kecl.ntt.co.jp/icl/lirg/jparacrawl/release/2.0/bitext/en-ja.tar.gz"
     fi
-    if [ $1 = "commoncrawl" ]; then
+    # monolingual data
+    if [ $1 = "commoncrawl-ja" ]; then
         echo "http://web-language-models.s3-website-us-east-1.amazonaws.com/ngrams/ja/deduped/ja.deduped.xz"
+    fi
+    if [ $1 = "commoncrawl-en" ]; then
+        echo "http://web-language-models.s3-website-us-east-1.amazonaws.com/wmt16/deduped/en-new.xz"
+    fi
+    # dev sets
+    if [ $1 = "dev" ]; then
+        echo "http://data.statmt.org/wmt20/translation-task/dev.tgz"
     fi
 }
 
 download $1
+
