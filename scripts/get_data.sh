@@ -49,11 +49,11 @@ unzip() {
   echo "Unzipping $1 corpus..."
   FILENAME=$(basename $(data_loc $1))
   if [[ $(data_loc $1) != 1Cz1Un9p8Xn9IpEMMrg2kXSDt0dnjxc4z ]]; then
-    if [[ $FILENAME == *".tar.gz"* ]]; then
+    if [[ $FILENAME == *".tar.gz" ]] || [[ $FILENAME == *".tgz" ]]; then
       tar -xf $BASE/data/wmt2021/$1/$FILENAME --directory $BASE/data/wmt2021/$1
-    elif [[ $FILENAME == *".tsv.gz"* ]] || [[ $FILENAME == *".gz"* ]]; then
+    elif [[ $FILENAME == *".tsv.gz" ]] || [[ $FILENAME == *".gz" ]]; then
       gzip -d $BASE/data/wmt2021/$1/$FILENAME
-    elif [[ $FILENAME == *".xz"* ]]; then
+    elif [[ $FILENAME == *".xz" ]]; then
       xz -d $BASE/data/wmt2021/$1/$FILENAME
     fi
   else
