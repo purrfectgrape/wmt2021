@@ -36,8 +36,8 @@ download() {
   fi
   FILENAME=$(basename $(data_loc $1))
   echo "Downloading $1 corpus..."
-  if [[ $(data_loc $1) == 1Cz1Un9p8Xn9IpEMMrg2kXSDt0dnjxc4z ]]; then
-    gdown --id 1Cz1Un9p8Xn9IpEMMrg2kXSDt0dnjxc4z -O $BASE/data/wmt2021/$1/XML_releases.tgz
+  if [[ $(data_loc $1) == 1gFeuPTRc3RB4DhJEkhr8O-a8PObM7Ix2 ]]; then
+    gdown --id $(data_loc $1) -O $BASE/data/wmt2021/$1/XML_releases.tgz
   else
     wget $(data_loc $1) -P $BASE/data/wmt2021/$1
   fi
@@ -48,12 +48,16 @@ download() {
 unzip() {
   echo "Unzipping $1 corpus..."
   FILENAME=$(basename $(data_loc $1))
-  if [[ $FILENAME == *".tar.gz" ]] || [[ $FILENAME == *".tgz" ]]; then
-    tar -xf $BASE/data/wmt2021/$1/$FILENAME --directory $BASE/data/wmt2021/$1
-  elif [[ $FILENAME == *".tsv.gz" ]] || [[ $FILENAME == *".gz" ]]; then
-    gzip -d $BASE/data/wmt2021/$1/$FILENAME
-  elif [[ $FILENAME == *".xz" ]]; then
-    xz -d $BASE/data/wmt2021/$1/$FILENAME
+  if [[ $(data_loc $1) != 1gFeuPTRc3RB4DhJEkhr8O-a8PObM7Ix2 ]]; then
+    if [[ $FILENAME == *".tar.gz" ]] || [[ $FILENAME == *".tgz" ]]; then
+      tar -xf $BASE/data/wmt2021/$1/$FILENAME --directory $BASE/data/wmt2021/$1
+    elif [[ $FILENAME == *".tsv.gz" ]] || [[ $FILENAME == *".gz" ]]; then
+      gzip -d $BASE/data/wmt2021/$1/$FILENAME
+    elif [[ $FILENAME == *".xz" ]]; then
+      xz -d $BASE/data/wmt2021/$1/$FILENAME
+    fi
+  else
+    tar -xf $BASE/data/wmt2021/$1/XML_releases.tgz --directory $BASE/data/wmt2021/$1
   fi
   echo "Done unzipping! Run ls $BASE/data/wmt2021/$1 to inspect the unzipped data"
 }
