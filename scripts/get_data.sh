@@ -48,16 +48,12 @@ download() {
 unzip() {
   echo "Unzipping $1 corpus..."
   FILENAME=$(basename $(data_loc $1))
-  if [[ $(data_loc $1) != 1Cz1Un9p8Xn9IpEMMrg2kXSDt0dnjxc4z ]]; then
-    if [[ $FILENAME == *".tar.gz" ]] || [[ $FILENAME == *".tgz" ]]; then
-      tar -xf $BASE/data/wmt2021/$1/$FILENAME --directory $BASE/data/wmt2021/$1
-    elif [[ $FILENAME == *".tsv.gz" ]] || [[ $FILENAME == *".gz" ]]; then
-      gzip -d $BASE/data/wmt2021/$1/$FILENAME
-    elif [[ $FILENAME == *".xz" ]]; then
-      xz -d $BASE/data/wmt2021/$1/$FILENAME
-    fi
-  else
-    tar -xf $BASE/data/wmt2021/$1/XML_releases.tgz --directory $BASE/data/wmt2021/$1
+  if [[ $FILENAME == *".tar.gz" ]] || [[ $FILENAME == *".tgz" ]]; then
+    tar -xf $BASE/data/wmt2021/$1/$FILENAME --directory $BASE/data/wmt2021/$1
+  elif [[ $FILENAME == *".tsv.gz" ]] || [[ $FILENAME == *".gz" ]]; then
+    gzip -d $BASE/data/wmt2021/$1/$FILENAME
+  elif [[ $FILENAME == *".xz" ]]; then
+    xz -d $BASE/data/wmt2021/$1/$FILENAME
   fi
   echo "Done unzipping! Run ls $BASE/data/wmt2021/$1 to inspect the unzipped data"
 }
@@ -85,7 +81,7 @@ data_loc() {
     fi
     if [[ $1 == "ted" ]]; then
 	# Ted talks data are shared via Google Drive so we will download it with gdown and by the file id.
-        echo "1Cz1Un9p8Xn9IpEMMrg2kXSDt0dnjxc4z"
+        echo "1gFeuPTRc3RB4DhJEkhr8O-a8PObM7Ix2"
     fi
 
     # monolingual data
