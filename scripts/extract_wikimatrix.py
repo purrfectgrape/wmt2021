@@ -13,7 +13,7 @@
 #
 # --------------------------------------------------------
 #
-# Tool to extract subset of mined bitexts in a tsv.gz file
+# Tool to extract subset of mined bitexts in a tsv file
 
 import os
 import sys
