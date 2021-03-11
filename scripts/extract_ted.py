@@ -16,13 +16,14 @@ parser.add_argument('--enja', type=str, required=True,
     help='zipped file of en-ja bitext')
 parser.add_argument('--jaen', type=str, required=True,
     help='zipped file of ja-en bitext')
-
+parser.add_argument('--out', type=str, required=True,
+    help='directory of the unzipped data')
 args = parser.parse_args()
 
 print('Tool to extract bitext from Ted Talks')
 
-with tarfile.open(args.enja)) as tar:
-    tar.extractall(path='data/wmt2021/ted')
+with tarfile.open(args.enja) as tar:
+    tar.extractall(path=args.out)
 
 with tarfile.open(args.jaen) as tar:
-    tar.extractall(path='data/wmt2021/ted')
+    tar.extractall(path=args.out)

@@ -1,4 +1,5 @@
 #!/bin/python3
+# Modified from the original script at: https://github.com/facebookresearch/LASER/blob/master/tasks/WikiMatrix/extract.py
 # Copyright (c) Facebook, Inc. and its affiliates.
 # All rights reserved.
 #
@@ -52,7 +53,7 @@ nl = 0
 nw_src = 0   
 nw_trg = 0   
 print('Processing {}'.format(args.tsv))
-with gzip.open(args.tsv, 'rt', encoding=args.encoding) as tsv:
+with open(args.tsv, 'rt', encoding=args.encoding) as tsv:
     with open(args.bitext + '.' + args.src_lang, 'wt', encoding=args.encoding) as fsrc:
         with open(args.bitext + '.' + args.trg_lang, 'wt', encoding=args.encoding) as ftrg:
             while nl < args.nb_sents:
@@ -68,6 +69,11 @@ with gzip.open(args.tsv, 'rt', encoding=args.encoding) as tsv:
                     break
                 if nw_trg + cur_trg > args.nb_words_trg:
                     break
+                # Modified from the original script to filter out sentences with the wrong lang id.
+                if fields[3].strip() != args.src_lang:
+                    continue
+                if fields[4].strip() != args.trg_lang:
+                    continue
                 fsrc.write(fields[1].strip() + '\n')
                 ftrg.write(fields[2].strip() + '\n')
                 nw_src += cur_src
