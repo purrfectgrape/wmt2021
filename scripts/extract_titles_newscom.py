@@ -55,7 +55,7 @@ if __name__ == "__main__":
                         nl += 1
                         if nl % 100000 == 0:
                             print('\r - {:d} lines read'.format(nl), end='')
-                    if corpus_type == 'wikititles':
+                    elif corpus_type == 'wikititles':
                         curr_nw_en = len(fields[1].split())
                         curr_nw_ja = len(fields[0].split())
                         if nw_en + curr_nw_en > args.nb_words_en:
