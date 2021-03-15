@@ -69,6 +69,8 @@ if __name__ == "__main__":
                         nl += 1
                         if nl % 100000 == 0:
                             print('\r - {:d} lines read'.format(nl), end='')
+                    else:
+                        print("Corpus type must be one of subtitles, news-commentary, or wikititles")
 
 print('\r - wrote {:d} lines'.format(nl))
 print(' - with {:d} source and {:d} target words'.format(nw_en, nw_ja))
