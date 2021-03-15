@@ -21,6 +21,12 @@ python3 scripts/extract_titles_newscom.py --txt=data/wmt2021/wikititles/wikititl
 ## Concatenate raw corpora for train
 ./scripts/concatenate_bitext.sh -c train/raw
 
+## Get fast-text pre-trained model
+wget -O /tmp/lid.176.bin https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin
+
+## Filter by lang-id
+python3 lang_id.py (This script took a while to run)
+
 # Steps to train a mid-sized model (as of Mar 7, 2021)
 
 cd //nas/models/experiment/ja-en/wmt2021

@@ -8,8 +8,8 @@ import optparse
 import sys
 
 optparser = optparse.OptionParser()
-optparser.add_option("-a", "--input_one", dest="input_one", default="data/raw/paracrawl.en", help="File containing sentences to get lang-id of (default=data/raw/paracrawl.en)")
-optparser.add_option("-b", "--input_two", dest="input_two", default="data/raw/paracrawl.ja", help="File containing sentences to get lang-id of (default=data/raw/paracrawl.ja)")
+optparser.add_option("-a", "--input_one", dest="input_one", default="data/train/raw/wmt2021-bitext.en", help="File containing sentences to get lang-id of (default=data/train/raw/wmt2021-bitext.en)")
+optparser.add_option("-b", "--input_two", dest="input_two", default="data/train/raw/wmt2021-bitext.ja", help="File containing sentences to get lang-id of (default=data/train/raw/wmt2021-bitext.ja)")
 optparser.add_option("-n", "--num_sentences", dest="num_sents", default=sys.maxsize, type="int", help="Number of sentences, default=no limit)")
 optparser.add_option("-s", "--conf_score", dest="score", default=0.9, type="float", help="Confidence score of prediction, default=0.9)")
 opts = optparser.parse_args()[0]
@@ -24,11 +24,11 @@ class LanguageIdentification:
         parallel_predictions = {}
         with open(file_one) as f1, open(file_two) as f2:
             for x, y in zip(f1, f2):
-                parallel_predictions[(x,y)] = (self.model.predict(x.decode('utf-8').strip()), self.model.predict(y.decode('utf-8').strip()))
+                parallel_predictions[(x,y)] = (self.model.predict(x.strip()), self.model.predict(y.strip()))
         return parallel_predictions
         
     def filter(self, predictions, file_one, file_two, score):
-        with open(file_one.split(".")[0] + "-filtered." + file_one.split(".")[1], "w") as out1, open(file_two.split(".")[0] + "-filtered." + file_two.split(".")[1], "w") as out2:
+        with open(file_one.split(".")[0] + "-langid-filtered." + file_one.split(".")[1], "w") as out1, open(file_two.split(".")[0] + "-langid-filtered." + file_two.split(".")[1], "w") as out2:
             for prediction_k, prediction_v in predictions.items():
                 if (prediction_v[0][1][0] > score and prediction_v[1][1][0] > score and file_one.split(".")[1] in prediction_v[0][0][0] and file_two.split(".")[1] in prediction_v[1][0][0]):
                     out1.write(prediction_k[0])
