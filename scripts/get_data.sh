@@ -118,6 +118,11 @@ data_loc() {
     if [[ $1 == "dev" ]]; then
         echo "http://data.statmt.org/wmt20/translation-task/dev.tgz"
     fi
+
+    # test sets
+    if [[ $1 == "test" ]]; then
+	echo "http://data.statmt.org/wmt20/translation-task/test.tgz"
+    fi
 }
 
 #########################
@@ -127,7 +132,7 @@ while getopts ":c:" flag; do
   case $flag in
     c)
       case $OPTARG in
-        paracrawl | news-commentary | wikititles | wikimatrix | subtitles | kftt | ted | newscrawl-ja | news-commentary-ja | commoncrawl-ja | newscrawl-en | news-discussion-en | europarl-en | news-commentary-en | commoncrawl-en | dev)
+        test | paracrawl | news-commentary | wikititles | wikimatrix | subtitles | kftt | ted | newscrawl-ja | news-commentary-ja | commoncrawl-ja | newscrawl-en | news-discussion-en | europarl-en | news-commentary-en | commoncrawl-en | dev)
 	  if [[ $(does_exist $OPTARG) == "true" ]]; then
 	    echo "File already exists. If you want to overwrite, remove the directory $BASE/data/wmt2021/$OPTARG with rm -rf $BASE/data/wmt2021/$OPTARG and run again."
 	    exit 1

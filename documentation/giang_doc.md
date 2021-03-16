@@ -14,8 +14,10 @@ python3 scripts/extract_kftt.py --in_dir=data/wmt2021/kftt/kftt-data-1.0/data --
 python3 scripts/extract_titles_newscom.py --txt=data/wmt2021/subtitles/raw/raw --bitext=data/train/raw/subtitles
 python3 scripts/extract_titles_newscom.py --txt=data/wmt2021/news-commentary/news-commentary-v16.en-ja.tsv --bitext=data/train/raw/news-commentary
 python3 scripts/extract_titles_newscom.py --txt=data/wmt2021/wikititles/wikititles-v3.ja-en.tsv --bitext=data/train/raw/wikititles
-python3 scripts/extract_dev.py --input_dir=data/wmt2021/dev/dev --direction=jaen --out_dir=data/dev/raw --tgt
-python3 scripts/extract_dev.py --input_dir=data/wmt2021/dev/dev --direction=jaen --out_dir=data/dev/raw --src
+python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/dev/dev --direction=jaen --out_dir=data/dev/raw --tgt
+python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/dev/dev --direction=jaen --out_dir=data/dev/raw --src
+python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/test/sgm --direction=jaen --out_dir=data/test/raw --tgt --type=test
+python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/test/sgm --direction=jaen --out_dir=data/test/raw --src --type=test
 
 ## Sanity check
 ./scripts/get_corpus_stats.sh -c train/raw
@@ -35,6 +37,9 @@ python3 scripts/lang_id.py --conf_score=0.85 (I used a lower threshold because w
 `For development data`
 ./scripts/moses_dev_en.sh -c newsdev2020-enja-src
 ./scripts/moses_dev_en.sh -c newsdev2020-jaen-ref
+`For test data`
+./scripts/moses_test_en.sh -c newstest2020-enja-src
+./scripts/moses_test_en.sh -c newstest2020-jaen-ref
 
 ## Preprocess JA data with fugashi
 `For training data`
@@ -42,14 +47,26 @@ python3 scripts/tokenize_japanese.py --input=data/train/raw/wmt2021-bitext-langi
 `For development data`
 python3 scripts/tokenize_japanese.py --input=data/dev/raw/newsdev2020-enja-ref.ja.sgm --output=data/dev/preprocessed/newsdev2020-enja-ref-tok.ja
 python3 scripts/tokenize_japanese.py --input=data/dev/raw/newsdev2020-jaen-src.ja.sgm --output=data/dev/preprocessed/newsdev2020-jaen-src-tok.ja
+`For test data`
+python3 scripts/tokenize_japanese.py --input=data/test/raw/newstest2020-enja-ref.ja.sgm --output=data/test/preprocessed/newstest2020-enja-ref-tok.ja
+python3 scripts/tokenize_japanese.py --input=data/test/raw/newstest2020-jaen-src.ja.sgm --output=data/test/preprocessed/newstest2020-jaen-src-tok.ja
 
 ## Learn bpe for both
 ./scripts/learn_bpe.sh -l ja
 ./scripts/learn_bpe.sh -l en
 ./scripts/learn_bpe_dev.sh -l ja
 ./scripts/learn_bpe_dev.sh -l en
+`Currently there's an error in learning bpe for data/test/preprocessed/newstest2020-enja-src-tok-bpe.en`
+./scripts/learn_bpe_test.sh -l ja
+./scripts/learn_bpe_test.sh -l en
 
 ## Build vocab
+onmt_preprocess -train_src data/train/preprocessed/wmt2021-bitext-tok-bpe.ja -train_tgt data/train/preprocessed/wmt2021-bitext-tok-bpe.en -valid_src data/dev/preprocessed/newsdev2020-jaen-src-tok-bpe.ja -valid_tgt data/dev/preprocessed/newsdev2020-jaen-ref-tok-bpe.en  -save_data //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/wmt2021-bitext  -overwrite
+
+## Train
+
+
+## Evaluate
 
 # Steps to train a mid-sized model (as of Mar 7, 2021)
 
@@ -83,7 +100,7 @@ sh scripts/moses_en.sh -c wikimatrix
 sh scripts/moses_en.sh -c paracrawl
 
 ## Filter newsdev data (preprocessed by Shinka)
-cat /nas/models/experiment/ja-en/wmt2021/data/test/wmt2020/enja/newstest2020-enja-ref.ja.sgm_cln.txt | sed '/^$/d' | grep -v "＜道新スポーツ９月２７日掲 載＞" > /nas/models/experiment/ja-en/wmt2021/data/raw/dev/newsdev2020-filtered.ja
+cat //nas/models/experiment/ja-en/wmt2021/data/wmt2020_dev/enja/newsdev2020-enja-ref.ja.sgm_cln.txt | sed '/^$/d' | grep -v "＜道新スポーツ９月２７日掲 載＞" > /nas/models/experiment/ja-en/wmt2021/data/raw/dev/newsdev2020-filtered.ja
 cat /nas/models/experiment/ja-en/wmt2021/data/wmt2020_dev/enja/newsdev2020-enja-src.en.sgm_cln.txt | sed '/^$/d' > /nas/models/experiment/ja-en/wmt2021/data/raw/dev/newsdev2020-filtered.en
 
 ## Preprocess the newsdev data
