@@ -14,6 +14,8 @@ python3 scripts/extract_kftt.py --in_dir=data/wmt2021/kftt/kftt-data-1.0/data --
 python3 scripts/extract_titles_newscom.py --txt=data/wmt2021/subtitles/raw/raw --bitext=data/train/raw/subtitles
 python3 scripts/extract_titles_newscom.py --txt=data/wmt2021/news-commentary/news-commentary-v16.en-ja.tsv --bitext=data/train/raw/news-commentary
 python3 scripts/extract_titles_newscom.py --txt=data/wmt2021/wikititles/wikititles-v3.ja-en.tsv --bitext=data/train/raw/wikititles
+python3 scripts/extract_dev.py --input_dir=data/wmt2021/dev/dev --direction=jaen --out_dir=data/dev/raw --tgt
+python3 scripts/extract_dev.py --input_dir=data/wmt2021/dev/dev --direction=jaen --out_dir=data/dev/raw --src
 
 ## Sanity check
 ./scripts/get_corpus_stats.sh -c train/raw
@@ -37,8 +39,10 @@ python3 scripts/tokenize_japanese.py --input=data/train/raw/wmt2021-bitext-langi
 ./scripts/learn_bpe.sh -l ja
 ./scripts/learn_bpe.sh -l en
 
-## Preprocess development set
-
+## Filter newsdev data (preprocessed by Shinka)
+`Translating from JA to EN`
+cat /nas/models/experiment/ja-en/wmt2021/data/wmt2020_dev/enja/newsdev2020-jaen-ref.en.sgm_cln.txt | sed '/^$/d' > /nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020.en
+cat /nas/models/experiment/ja-en/wmt2021/data/wmt2020_dev/enja/newsdev2020-jaen-src.ja.sgm_cln.txt | sed '/^$/d' > /nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020.ja
 ## Build vocab
 
 # Steps to train a mid-sized model (as of Mar 7, 2021)

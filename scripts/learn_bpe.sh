@@ -22,6 +22,11 @@ while getopts ":l:" opt; do
           subword-nmt apply-bpe -c $BASE/data/train/preprocessed/wmt2021-bitext-bpe.$OPTARG < $BASE/data/train/preprocessed/wmt2021-bitext-tok.$OPTARG > $BASE/data/train/preprocessed/wmt2021-bitext-tok-bpe.$OPTARG
 
          ;;
+	 *)
+	  echo "Invalid argument: $OPTARG. Usage: ./scripts/learn_bpe -l ja. Argument must be either ja or en." >&2
+    	;;
+      esac
+    ;;
     \?)
       echo "Usage: cmd [-c]"
       echo "Option for l is ja or en"
