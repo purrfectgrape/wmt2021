@@ -1,23 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-@author: gianghale
+@author: Giang Le (gianghl2@illinois.edu)
 This script tokenizes Japanese using fugashi, a wrapper for MeCab Japanese morphological analyzer.
+This script needs to be refactored later.
 """
 import re
 import os
 import sys
 import fugashi
 import ipadic
+import argparse
 
-current = os.getcwd()
-data_dir = os.getcwd() + "/data/raw/"
+parser = argparse.ArgumentParser(description='Tool to tokenize Japanese data using fugashi.')
+parser.add_argument('--input', type=str, required=True,
+    help='File with Japanese text')
+parser.add_argument('--output', type=str, required=True,
+    help='Destination file')
+args = parser.parse_args()
 
-if not len(sys.argv) == 2:
-    raise SystemExit("Usage: {} type".format(sys.argv[0]))
-
-if not ("dev/newsdev2020-filtered" in sys.argv[1] or "reuters" in sys.argv[1] or "paracrawl" in sys.argv[1] or "wikimatrix" in sys.argv[1] or "newscommentary" in sys.argv[1] or "corpus_mid" in sys.argv[1]):
-    raise SystemExit("Type of file must be dev/newsdev2020-filtered, reuters, wikimatrix, newscommentary, paracrawl, or corpus_mid")
 
 def create_lines(file):
     lines = []
@@ -37,13 +38,12 @@ def write_lines(lines, file):
         lines_tokenized = []
         new_line = ""
         for line in lines:
-            outfile.write(" ".join([token.surface for token in line]) + "\n")
+            outfile.write(" ".join([token.surface for token in line]) + "\n")            
             
-            
-print("Tokenizing Japanese " + sys.argv[1] + " data")
-lines_list = create_lines(data_dir + sys.argv[1] + ".ja")
+print("Tokenizing Japanese " + args.input + " data")
+lines_list = create_lines(args.input)
 lines_to_write = tokenize(lines_list)
 for l in lines_to_write:
     print(l)
-write_lines(lines_to_write, data_dir + sys.argv[1] + "-tok.ja")
+write_lines(lines_to_write, args.output)
 print("Done!")

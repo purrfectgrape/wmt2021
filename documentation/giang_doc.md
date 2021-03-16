@@ -25,7 +25,21 @@ python3 scripts/extract_titles_newscom.py --txt=data/wmt2021/wikititles/wikititl
 wget -O /tmp/lid.176.bin https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin
 
 ## Filter by lang-id
-python3 lang_id.py (This script took a while to run)
+python3 scripts/lang_id.py --conf_score=0.85 (I used a lower threshold because when I set the threshold to 0.9 only 6.4M sentence pairs were left. This script took a while to run)
+
+## Preprocess EN data with Moses
+./scripts/moses_en.sh -c wmt2021-bitext
+
+## Preprocess JA data with fugashi
+python3 scripts/tokenize_japanese.py --input=data/train/raw/wmt2021-bitext-langid-filtered.ja --output=data/train/preprocessed/wmt2021-bitext-tok.ja
+
+## Learn bpe for both
+./scripts/learn_bpe.sh -l ja
+./scripts/learn_bpe.sh -l en
+
+## Preprocess development set
+
+## Build vocab
 
 # Steps to train a mid-sized model (as of Mar 7, 2021)
 
