@@ -39,6 +39,7 @@ if __name__ == "__main__":
         with open(os.path.join(args.out_dir, 'newsdev2020-' + args.direction + '-src.' + ''.join(list(args.direction)[:2]) + '.sgm'), 'wt') as outfile:
             for sent in sents_list:
                 outfile.write(sent + '\n')
+        print('Done. Check the data in ' + args.out_dir)
     elif args.tgt:
         with open(os.path.join(args.input_dir, 'newsdev2020-' + args.direction + '-ref.' + ''.join(list(args.direction)[2:]) + '.sgm')) as infile:
             soup = BeautifulSoup(infile.read())
@@ -48,3 +49,4 @@ if __name__ == "__main__":
         with open(os.path.join(args.out_dir, 'newsdev2020-' + args.direction + '-ref.' + ''.join(list(args.direction)[2:]) + '.sgm'), 'wt') as outfile:
             for sent in sents_list:
                 outfile.write(sent + '\n')
+        print('Done. Check the data in ' + args.out_dir)

@@ -30,19 +30,25 @@ wget -O /tmp/lid.176.bin https://dl.fbaipublicfiles.com/fasttext/supervised-mode
 python3 scripts/lang_id.py --conf_score=0.85 (I used a lower threshold because when I set the threshold to 0.9 only 6.4M sentence pairs were left. This script took a while to run)
 
 ## Preprocess EN data with Moses
+`For training data`
 ./scripts/moses_en.sh -c wmt2021-bitext
+`For development data`
+./scripts/moses_dev_en.sh -c newsdev2020-enja-src
+./scripts/moses_dev_en.sh -c newsdev2020-jaen-ref
 
 ## Preprocess JA data with fugashi
+`For training data`
 python3 scripts/tokenize_japanese.py --input=data/train/raw/wmt2021-bitext-langid-filtered.ja --output=data/train/preprocessed/wmt2021-bitext-tok.ja
+`For development data`
+python3 scripts/tokenize_japanese.py --input=data/dev/raw/newsdev2020-enja-ref.ja.sgm --output=data/dev/preprocessed/newsdev2020-enja-ref-tok.ja
+python3 scripts/tokenize_japanese.py --input=data/dev/raw/newsdev2020-jaen-src.ja.sgm --output=data/dev/preprocessed/newsdev2020-jaen-src-tok.ja
 
 ## Learn bpe for both
 ./scripts/learn_bpe.sh -l ja
 ./scripts/learn_bpe.sh -l en
+./scripts/learn_bpe_dev.sh -l ja
+./scripts/learn_bpe_dev.sh -l en
 
-## Filter newsdev data (preprocessed by Shinka)
-`Translating from JA to EN`
-cat /nas/models/experiment/ja-en/wmt2021/data/wmt2020_dev/enja/newsdev2020-jaen-ref.en.sgm_cln.txt | sed '/^$/d' > /nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020.en
-cat /nas/models/experiment/ja-en/wmt2021/data/wmt2020_dev/enja/newsdev2020-jaen-src.ja.sgm_cln.txt | sed '/^$/d' > /nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020.ja
 ## Build vocab
 
 # Steps to train a mid-sized model (as of Mar 7, 2021)
