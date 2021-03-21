@@ -1,5 +1,4 @@
 # Steps to prepare a full-sized model
-
 cd //nas/models/experiment/ja-en/wmt2021
 
 ## Get all data from WMT 2021 (Would take about 7 or 8 hours)
@@ -14,8 +13,8 @@ python3 scripts/extract_kftt.py --in_dir=data/wmt2021/kftt/kftt-data-1.0/data --
 python3 scripts/extract_titles_newscom.py --txt=data/wmt2021/subtitles/raw/raw --bitext=data/train/raw/subtitles
 python3 scripts/extract_titles_newscom.py --txt=data/wmt2021/news-commentary/news-commentary-v16.en-ja.tsv --bitext=data/train/raw/news-commentary
 python3 scripts/extract_titles_newscom.py --txt=data/wmt2021/wikititles/wikititles-v3.ja-en.tsv --bitext=data/train/raw/wikititles
-python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/dev/dev --direction=jaen --out_dir=data/dev/raw --tgt
-python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/dev/dev --direction=jaen --out_dir=data/dev/raw --src
+python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/dev/dev --direction=jaen --out_dir=data/dev/raw --tgt --type=dev
+python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/dev/dev --direction=jaen --out_dir=data/dev/raw --src  --type=dev
 python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/test/sgm --direction=jaen --out_dir=data/test/raw --tgt --type=test
 python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/test/sgm --direction=jaen --out_dir=data/test/raw --src --type=test
 
@@ -29,7 +28,7 @@ python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/test/sgm --directio
 wget -O /tmp/lid.176.bin https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin
 
 ## Filter by lang-id
-python3 scripts/lang_id.py --conf_score=0.85 (I used a lower threshold because when I set the threshold to 0.9 only 6.4M sentence pairs were left. This script took a while to run)
+python3 scripts/lang_id.py --conf_score=0.85
 
 ## Preprocess EN data with Moses
 `For training data`
@@ -54,6 +53,7 @@ python3 scripts/tokenize_japanese.py --input=data/test/raw/newstest2020-jaen-src
 ## Learn bpe for both
 ./scripts/learn_bpe.sh -l ja
 ./scripts/learn_bpe.sh -l en
+`For development data. Normal to have 4 warnings.`
 ./scripts/learn_bpe_dev.sh -l ja
 ./scripts/learn_bpe_dev.sh -l en
 `Currently there's an error in learning bpe for data/test/preprocessed/newstest2020-enja-src-tok-bpe.en`
@@ -64,22 +64,28 @@ python3 scripts/tokenize_japanese.py --input=data/test/raw/newstest2020-jaen-src
 onmt_preprocess -train_src data/train/preprocessed/wmt2021-bitext-tok-bpe.ja -train_tgt data/train/preprocessed/wmt2021-bitext-tok-bpe.en -valid_src data/dev/preprocessed/newsdev2020-jaen-src-tok-bpe.ja -valid_tgt data/dev/preprocessed/newsdev2020-jaen-ref-tok-bpe.en  -save_data //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/wmt2021-bitext  -overwrite
 
 ## Train
-
+CUDA_VISIBLE_DEVICES=0 OMP_NUM_THREADS=5 onmt_train -config=configs/wmt2021-bitext.yaml
 
 ## Evaluate
+./scripts/eval_wmt2021-bitext.sh
 
-# Steps to train a mid-sized model (as of Mar 7, 2021)
+# Steps to train a mid-sized model (as of Mar 21, 2021) to translate EN->JA
 
 cd //nas/models/experiment/ja-en/wmt2021
 
 ## Download the parallel data
-sh scripts/get_data.sh -c reuters
-sh scripts/get_data.sh -c wikimatrix
-sh scripts/get_data.sh -c paracrawl
-sh scripts/get_data.sh -c newscommentary
+sh scripts/get_mid_corpus.sh -c reuters
+sh scripts/get_mid_corpus.sh -c wikimatrix
+sh scripts/get_mid_corpus.sh -c paracrawl
+sh scripts/get_mid_corpus.sh -c newscommentary
+./scripts/get_data.sh -c dev
 
 ## Write the lines to English and Japanese files
-sh scripts/preprocess_small_sample.sh
+sh scripts/preprocess_mid_corpus.sh
+
+## Extract dev lines
+python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/dev/dev --direction=enja --out_dir=data/dev/raw --tgt --type=dev
+python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/dev/dev --direction=enja --out_dir=data/dev/raw --src  --type=dev
 
 ## Get fast-text pre-trained model
 wget -O /tmp/lid.176.bin https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin
@@ -94,32 +100,34 @@ scripts/lang_id.py -a data/raw/wikimatrix.ja -b data/raw/wikimatrix.en
 git clone https://github.com/bricksdont/moses-scripts libraries/moses
 
 ## Preprocessing the English data with Moses
-sh scripts/moses_en.sh -c reuters
-sh scripts/moses_en.sh -c newscommentary
-sh scripts/moses_en.sh -c wikimatrix
-sh scripts/moses_en.sh -c paracrawl
+sh scripts/moses_en_mid.sh -c reuters
+sh scripts/moses_en_mid.sh -c newscommentary
+sh scripts/moses_en_mid.sh -c wikimatrix
+sh scripts/moses_en_mid.sh -c paracrawl
+`for development data`
+./scripts/moses_dev_en.sh -c newsdev2020-enja-src
 
-## Filter newsdev data (preprocessed by Shinka)
-cat //nas/models/experiment/ja-en/wmt2021/data/wmt2020_dev/enja/newsdev2020-enja-ref.ja.sgm_cln.txt | sed '/^$/d' | grep -v "＜道新スポーツ９月２７日掲 載＞" > /nas/models/experiment/ja-en/wmt2021/data/raw/dev/newsdev2020-filtered.ja
-cat /nas/models/experiment/ja-en/wmt2021/data/wmt2020_dev/enja/newsdev2020-enja-src.en.sgm_cln.txt | sed '/^$/d' > /nas/models/experiment/ja-en/wmt2021/data/raw/dev/newsdev2020-filtered.en
+## Preprocessing the Japanese data with fugashi
+python3 scripts/tokenize_japanese.py --input=data/raw/reuters-langid-filtered.ja --output=data/preprocessed/reuters-tok.ja
+python3 scripts/tokenize_japanese.py --input=data/raw/newscommentary-langid-filtered.ja --output=data/preprocessed/newscommentary-tok.ja
+python3 scripts/tokenize_japanese.py --input=data/raw/wikimatrix-langid-filtered.ja --output=data/preprocessed/wikimatrix-tok.ja
+python3 scripts/tokenize_japanese.py --input=data/raw/paracrawl-langid-filtered.ja --output=data/preprocessed/paracrawl-tok.ja
+`for development data`
+python3 scripts/tokenize_japanese.py --input=data/dev/raw/newsdev2020-enja-ref.ja.sgm --output=data/dev/preprocessed/newsdev2020-enja-ref-tok.ja
 
-## Preprocess the newsdev data
-sh scripts/moses_en.sh -c dev/newsdev2020
+## Learn bpe
+./scripts/learn_bpe_mid.sh -l ja
+./scripts/learn_bpe_mid.sh -l en
+`for development data. It's normal to have 4 warnings` 
+./scripts/learn_bpe_dev.sh -l ja
+./scripts/learn_bpe_dev.sh -l en
 
-## Combine training corpora
-cat /nas/models/experiment/ja-en/wmt2021/data/preprocessed/*tok.en > /nas/models/experiment/ja-en/wmt2021/data/preprocessed/corpus_mid.en
-cat /nas/models/experiment/ja-en/wmt2021/data/sentence_filtered/*filtered_tok.ja > /nas/models/experiment/ja-en/wmt2021/data/preprocessed/corpus_mid.ja
-
-## Tokenize the newsdev data using fugashi
-python3 scripts/tokenize_japanese.py dev/newsdev2020-filtered
-mv data/raw/dev/newsdev2020-filtered-tok.ja data/preprocessed/dev/newsdev2020-tok.ja
-
-## The training data can be found in data/preprocessed/corpus_mid.{en|ja} and the dev data can be found in data/preprocessed/dev/
+## The training data can be found in data/train/preprocessed/corpus-mid-tok-bpe.{en|ja} and the dev data can be found in data/dev/preprocessed
 
 source /opt/python/3.7/venv/pytorch1.3_cuda10.0/bin/activate
 
 ## Build vocab
-onmt_preprocess -train_src //nas/models/experiment/ja-en/wmt2021/data/preprocessed/corpus_mid.ja -train_tgt //nas/models/experiment/ja-en/wmt2021/data/preprocessed/corpus_mid.en -valid_src //nas/models/experiment/ja-en/wmt2021/data/preprocessed/dev/newsdev2020-tok.ja -valid_tgt //nas/models/experiment/ja-en/wmt2021/data/preprocessed/dev/newsdev2020-tok.en -save_data //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/corpus_mid -overwrite
+onmt_preprocess -train_src //nas/models/experiment/ja-en/wmt2021/data/train/preprocessed/corpus-mid-tok-bpe.en -train_tgt //nas/models/experiment/ja-en/wmt2021/data/train/preprocessed/corpus-mid-tok-bpe.ja -valid_src //nas/models/experiment/ja-en/wmt2021/data/dev/preprocessed/newsdev2020-enja-src-tok-bpe.en -valid_tgt //nas/models/experiment/ja-en/wmt2021/data/dev/preprocessed/newsdev2020-enja-ref-tok-bpe.ja -save_data //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/corpus-mid-0321 -overwrite
 
 ## Train the model
 CUDA_VISIBLE_DEVICES=0 OMP_NUM_THREADS=5 onmt_train -config=configs/corpus_mid_baseline.yaml

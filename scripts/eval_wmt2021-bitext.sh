@@ -10,13 +10,16 @@ for checkpoint in $BASE/models/wmt2021-bitext_step*.pt; do
     base=$(basename $checkpoint)
     onmt_translate \
         -batch_size 2000 \
-        -beam_size 10 \
+	-gpu 0 \
+        -beam_size 15 \
         -model $checkpoint \
         -src $BASE/data/test/preprocessed/newstest2020-jaen-src-tok-bpe.ja \
         -tgt $BASE/data/test/preprocessed/newstest2020-jaen-ref-tok-bpe.en \
         -output $BASE/eval/wmt2021-bitext/test.en.hyp_${base%.*}
 done
 
+# Undo bpe
+#$BASE/data/test/preprocessed/newstest2020-jaen-ref-tok-bpe.en | sed -r 's/@@ //g' > $BASE/data/test/preprocessed/newstest2020-jaen-ref-tok.en
 #for checkpoint in $BASE/models/corpus_mid_step*.pt; do
 #    echo "$checkpoint"
 #    base=$(basename $checkpoint)
