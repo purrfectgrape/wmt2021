@@ -36,34 +36,34 @@ wget -O /tmp/lid.176.bin https://dl.fbaipublicfiles.com/fasttext/supervised-mode
 python3 scripts/lang_id.py --conf_score=0.85
 
 ## Preprocess EN data with Moses
-`For training data`
+### Training data
 ./scripts/moses_en.sh -c wmt2021-bitext<br>
-`For development data`
+### Dev data
 ./scripts/moses_dev_en.sh -c newsdev2020-enja-src<br>
 ./scripts/moses_dev_en.sh -c newsdev2020-jaen-ref<br>
-`For test data`
+### Test data
 ./scripts/moses_test_en.sh -c newstest2020-enja-src<br>
 ./scripts/moses_test_en.sh -c newstest2020-jaen-ref<br>
 
 ## Preprocess JA data with fugashi
-`For training data`
+### Training data
 python3 scripts/tokenize_japanese.py --input=data/train/raw/wmt2021-bitext-langid-filtered.ja --output=data/train/preprocessed/wmt2021-bitext-tok.ja<br>
-`For development data`
+### Dev data
 python3 scripts/tokenize_japanese.py --input=data/dev/raw/newsdev2020-enja-ref.ja.sgm --output=data/dev/preprocessed/newsdev2020-enja-ref-tok.ja<br>
 python3 scripts/tokenize_japanese.py --input=data/dev/raw/newsdev2020-jaen-src.ja.sgm --output=data/dev/preprocessed/newsdev2020-jaen-src-tok.ja<br>
-`For test data`
+### Test data
 python3 scripts/tokenize_japanese.py --input=data/test/raw/newstest2020-enja-ref.ja.sgm --output=data/test/preprocessed/newstest2020-enja-ref-tok.ja<br>
 python3 scripts/tokenize_japanese.py --input=data/test/raw/newstest2020-jaen-src.ja.sgm --output=data/test/preprocessed/newstest2020-jaen-src-tok.ja<br>
 
 ## Learn bpe for both
-`For training data`
+### Training data
 ./scripts/learn_bpe.sh -l ja<br>
 ./scripts/learn_bpe.sh -l en<br>
-`For development data.` *Normal to have 4 warnings.*
+### Dev data
+ *Normal to have 4 warnings.*
 ./scripts/learn_bpe_dev.sh -l ja<br>
 ./scripts/learn_bpe_dev.sh -l en<br>
-
-`For test data`
+### Test data
 *Currently there's an error in learning bpe for data/test/preprocessed/newstest2020-enja-src-tok-bpe.en*
 ./scripts/learn_bpe_test.sh -l ja<br>
 ./scripts/learn_bpe_test.sh -l en<br>
@@ -117,9 +117,9 @@ sh scripts/moses_en_mid.sh -c reuters<br>
 sh scripts/moses_en_mid.sh -c newscommentary<br>
 sh scripts/moses_en_mid.sh -c wikimatrix<br>
 sh scripts/moses_en_mid.sh -c paracrawl<br>
-`For development data`
+### Dev data
 ./scripts/moses_dev_en.sh -c newsdev2020-enja-src
-`For test data`
+### Test data
 ./scripts/moses_test_en.sh -c newstest2020-enja-src
 
 ## Preprocessing the Japanese data with fugashi
@@ -127,23 +127,26 @@ python3 scripts/tokenize_japanese.py --input=data/raw/reuters-langid-filtered.ja
 python3 scripts/tokenize_japanese.py --input=data/raw/newscommentary-langid-filtered.ja --output=data/preprocessed/newscommentary-tok.ja<br>
 python3 scripts/tokenize_japanese.py --input=data/raw/wikimatrix-langid-filtered.ja --output=data/preprocessed/wikimatrix-tok.ja<br>
 python3 scripts/tokenize_japanese.py --input=data/raw/paracrawl-langid-filtered.ja --output=data/preprocessed/paracrawl-tok.ja<br>
-`For development data`
+### Dev data
 python3 scripts/tokenize_japanese.py --input=data/dev/raw/newsdev2020-enja-ref.ja.sgm --output=data/dev/preprocessed/newsdev2020-enja-ref-tok.ja
-`For test data`
+### Test data
 python3 scripts/tokenize_japanese.py --input=data/test/raw/newstest2020-enja-ref.ja.sgm --output=data/test/preprocessed/newstest2020-enja-ref-tok.ja
 
 ## Learn bpe
 ./scripts/learn_bpe_mid.sh -l ja<br>
 ./scripts/learn_bpe_mid.sh -l en<br>
-`For development data.` *It's normal to have 4 warnings* 
+### Dev data
+*It's normal to have 4 warnings* 
 ./scripts/learn_bpe_dev.sh -l ja
 ./scripts/learn_bpe_dev.sh -l en
-`For test data` *It's normal to have 4 warnings*
+### Test data
+*It's normal to have 4 warnings*
 ./scripts/learn_bpe_test.sh -l ja
 ./scripts/learn_bpe_test.sh -l en
 
-## The training data can be found in data/train/preprocessed/corpus-mid-tok-bpe.{en|ja} and the dev data can be found in data/dev/preprocessed
+**The training data can be found in data/train/preprocessed/corpus-mid-tok-bpe.{en|ja} and the dev data can be found in data/dev/preprocessed after these steps**
 
+## Activate venv
 source /opt/python/3.7/venv/pytorch1.3_cuda10.0/bin/activate
 
 ## Build vocab
