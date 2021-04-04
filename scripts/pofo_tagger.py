@@ -45,18 +45,42 @@ politeness_formality_mappings = {
             'くださいませ',
             ],
         'plain': [
-            'だ',
+            'だ',     # N and na-adj endings
             'だった',
-            'だろう'
+            'だろう',
+            'そうだ',
+            'ようだ',
             'じゃない',
             'ではない',
             'じゃなかった'
+            'くて',     # i-adj endings
             'くない',
             'くなかった',
-            'そうだ',
-            'ようだ',
+            'かった',
+            'かろう',
+            'かったろう',
             'ない',  # might be risky?
             'なかった',
+            'こない',
+            'こい',
+            'こよう',
+            'する',   # suru endings
+            'しない',
+            'しろ',
+            'しよう',
+            'できる',
+            'たろう',
+            'しまう',
+            'られる',
+            'される',
+            'させる',
+            'させられる',
+            'られた',
+            'された',
+            'させた',
+            'させられた',
+            'ている',
+            'ていた',
             ],
         'formal': [
             'である',
@@ -96,30 +120,35 @@ with open(args.corpus + '-pofo-tagged.en', 'wt') as out_en:
                 for token in mk.getTagsToString(line_ja).strip().split()[::-1]:
                     try:
                         # である case. Here で is tagged as 助動詞.
-                        if token.split('/')[1] == '動詞' and token.split('/')[0] == 'あ' and mk.getTagsToString(line_ja).strip().split()[index-1].split('/')[0] =='で':
-                                verb_endings = ''.join(token for triples in mk.getTagsToString(line_ja).strip().split()[index-1::] for token in triples.split('/')[0] if triples.split('/')[1] != punc_tag)
-                                for key, endings in politeness_formality_mappings.items():
-                                    for ending in endings:
-                                        if verb_endings.endswith(ending):
-                                            line_en = re.sub('^', '<' + key + '> ', line_en)
-                                            out_en.write(line_en.strip() + '\n')
-                                            break
-                                index -= 1
-                                break
+                        if (token.split('/')[1] == '動詞' and
+                                token.split('/')[0] == 'あ' and
+                                mk.getTagsToString(line_ja).strip().split()[index-1].split('/')[0] =='で'):
+                            verb_endings = ''.join(token for triples in mk.getTagsToString(line_ja).strip().split()[index-1::] for token in triples.split('/')[0] if triples.split('/')[1] != punc_tag)
+                            for key, endings in politeness_formality_mappings.items():
+                                for ending in endings:
+                                    if verb_endings.endswith(ending):
+                                        print(key + ' || ' + verb_endings + ' || ' + line_ja.strip())
+                                        out_en.write(re.sub('^', '<' + key + '> ', line_en).strip() + '\n')
+                                        nl += 1
+                                        break
+                            index -= 1
+                            break
+                        # The other cases. Need to refactor for readability.
                         elif token.split('/')[1] == '動詞' and token.split('/')[0] != 'あ':
                             verb_endings = ''.join(token for triples in mk.getTagsToString(line_ja).strip().split()[index::] for token in triples.split('/')[0] if triples.split('/')[1] != punc_tag)
                             for key, endings in politeness_formality_mappings.items():
                                 for ending in endings:
                                     if verb_endings.endswith(ending):
-                                        line_en = re.sub('^', '<' + key + '> ', line_en)
-                                        out_en.write(line_en.strip() + '\n')
+                                        print(key + ' || ' + verb_endings + ' || ' + line_ja.strip())
+                                        out_en.write(re.sub('^', '<' + key + '> ', line_en).strip() + '\n')
+                                        nl += 1
                                         break
                             index -= 1
                             break
                     except (IndexError):
                         pass
                     index -= 1
-                    out_en.write(line_en.strip() + '\n')
+                out_en.write(line_en.strip() + '\n')
                 nl += 1
                 
 
