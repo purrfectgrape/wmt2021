@@ -155,6 +155,7 @@ onmt_preprocess -train_src //nas/models/experiment/ja-en/wmt2021/data/train/prep
 ## Train the model
 CUDA_VISIBLE_DEVICES=0 OMP_NUM_THREADS=5 onmt_train -config=configs/corpus_mid_baseline.yaml
 
-## Evaluate
+## Translate
 ./scripts/eval_mid_sudachi.sh
 
+## Postprocessing and evaluation
