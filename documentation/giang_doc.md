@@ -1,3 +1,6 @@
+# Politeness tagger
+python scripts/pofo_tagger.py --corpus=data/train/raw/paracrawl --nb_sents=10000
+
 # Steps to prepare a full-sized model
 
 ## Execute scripts from wmt2021/ directory

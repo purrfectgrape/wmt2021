@@ -80,6 +80,7 @@ politeness_formality_mappings = {
             'させた',
             'させられた',
             'ている',
+            'いる',
             'ていた',
             ],
         'formal': [
@@ -106,51 +107,60 @@ politeness_formality_mappings = {
 
 verb_and_tail_tags = set(['動詞','語尾', '助動', '助動詞'])
 punc_tag = '補助記号'
+
+def clean_up(line_ja):
+    line_ja = line_ja.replace('\\ /補助記号/UNK', '') # remove spaces
+    line_ja = line_ja.replace('。/補助記号/。','') # remove final punctuation
+    return line_ja
+
+def extract_verb_ending(line_ja):
+    nb_tokens = len(mk.getTagsToString(line_ja).strip().split())
+    index = nb_tokens-1
+    verb_ending = ''
+    for token in mk.getTagsToString(line_ja).strip().split()[::-1]:
+        try:
+            if (token.split('/')[1] == '動詞' and token.split('/')[0] == 'あ' and mk.getTagsToString(line_ja).strip().split()[index-1].split('/')[0] =='で'):
+                verb_ending = ''.join(token for triples in mk.getTagsToString(line_ja).strip().split()[index-1::] for token in triples.split('/')[0] if triples.split('/')[1] in verb_and_tail_tags)
+                return verb_ending
+            elif (token.split('/')[1] == '動詞' and token.split('/')[0] != 'あ'):
+                verb_ending =  ''.join(token for triples in mk.getTagsToString(line_ja).strip().split()[index::] for token in triples.split('/')[0] if triples.split('/')[1] in verb_and_tail_tags)
+                return verb_ending
+            else:
+                index -= 1
+        except IndexError:
+            pass
+    return verb_ending
+
+def write_tags(verb_ending, politeness_formality_mappings, line_en, out_en):
+    tagged = False
+    for key, endings in politeness_formality_mappings.items():
+        for ending in endings:
+            if verb_ending.endswith(ending):
+                out_en.write(re.sub('^', '<' + key + '> ', line_en).strip() + '\n')
+                tagged = True
+                print(key + verb_ending)
+                break
+        break
+    if tagged == False:
+        out_en.write(line_en.strip() + '\n')
+    return tagged
+
 nl = 0
+count = 0
 with open(args.corpus + '-pofo-tagged.en', 'wt') as out_en:
     with open(args.corpus + '.en', 'rt') as f_en:
         with open(args.corpus + '.ja', 'rt') as f_ja:
             while nl < args.nb_sents:
                 line_en = f_en.readline()
                 line_ja = f_ja.readline()
-                line_ja = line_ja.replace('\\ /補助記号/UNK', '') # remove spaces
-                # Going through the line token by token in backward order.
-                nb_tokens = len(mk.getTagsToString(line_ja).strip().split())
-                index = nb_tokens-1
-                for token in mk.getTagsToString(line_ja).strip().split()[::-1]:
-                    try:
-                        # である case. Here で is tagged as 助動詞.
-                        if (token.split('/')[1] == '動詞' and
-                                token.split('/')[0] == 'あ' and
-                                mk.getTagsToString(line_ja).strip().split()[index-1].split('/')[0] =='で'):
-                            verb_endings = ''.join(token for triples in mk.getTagsToString(line_ja).strip().split()[index-1::] for token in triples.split('/')[0] if triples.split('/')[1] != punc_tag)
-                            for key, endings in politeness_formality_mappings.items():
-                                for ending in endings:
-                                    if verb_endings.endswith(ending):
-                                        print(key + ' || ' + verb_endings + ' || ' + line_ja.strip())
-                                        out_en.write(re.sub('^', '<' + key + '> ', line_en).strip() + '\n')
-                                        nl += 1
-                                        break
-                            index -= 1
-                            break
-                        # The other cases. Need to refactor for readability.
-                        elif token.split('/')[1] == '動詞' and token.split('/')[0] != 'あ':
-                            verb_endings = ''.join(token for triples in mk.getTagsToString(line_ja).strip().split()[index::] for token in triples.split('/')[0] if triples.split('/')[1] != punc_tag)
-                            for key, endings in politeness_formality_mappings.items():
-                                for ending in endings:
-                                    if verb_endings.endswith(ending):
-                                        print(key + ' || ' + verb_endings + ' || ' + line_ja.strip())
-                                        out_en.write(re.sub('^', '<' + key + '> ', line_en).strip() + '\n')
-                                        nl += 1
-                                        break
-                            index -= 1
-                            break
-                    except (IndexError):
-                        pass
-                    index -= 1
-                out_en.write(line_en.strip() + '\n')
+                line_ja = clean_up(line_ja)
+                verb_ending = extract_verb_ending(line_ja)
+                count += write_tags(verb_ending, politeness_formality_mappings, line_en, out_en)
                 nl += 1
+print('Number of lines tagged: ' + str(count))
                 
+                                
+                                
 
 
 
