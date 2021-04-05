@@ -53,6 +53,7 @@ politeness_formality_mappings = {
             'じゃない',
             'ではない',
             'じゃなかった'
+            'い',  # risky?
             'くて',     # i-adj endings
             'くない',
             'くなかった',
@@ -61,16 +62,18 @@ politeness_formality_mappings = {
             'かったろう',
             'ない',  # might be risky?
             'なかった',
-            'こない',
+            'こない', # kuru endings
             'こい',
             'こよう',
             'する',   # suru endings
             'しない',
             'しろ',
             'しよう',
+          #  'した',   # caused double tagging with ました
             'できる',
             'たろう',
             'しまう',
+            'しまった',
             'られる',
             'される',
             'させる',
@@ -81,6 +84,7 @@ politeness_formality_mappings = {
             'させられた',
             'ている',
             'いる',
+            'いた',
             'ていた',
             ],
         'formal': [
@@ -105,7 +109,8 @@ politeness_formality_mappings = {
             ]
         }
 
-verb_and_tail_tags = set(['動詞','語尾', '助動', '助動詞'])
+verb_and_tail_tags = set(['動詞', '語尾', '助動', '助動詞'])
+adj_and_tail_tags = set(['形容詞','語尾'])
 punc_tag = '補助記号'
 
 def clean_up(line_ja):
@@ -125,11 +130,13 @@ def extract_verb_ending(line_ja):
             elif (token.split('/')[1] == '動詞' and token.split('/')[0] != 'あ'):
                 verb_ending =  ''.join(token for triples in mk.getTagsToString(line_ja).strip().split()[index::] for token in triples.split('/')[0] if triples.split('/')[1] in verb_and_tail_tags)
                 return verb_ending
+            elif (token.split('/')[1] == '形容詞' and token.split('/')[0] != 'あ'):
+                verb_ending =  ''.join(token for triples in mk.getTagsToString(line_ja).strip().split()[index::] for token in triples.split('/')[0] if triples.split('/')[1] in adj_and_tail_tags)
+                return verb_ending
             else:
                 index -= 1
         except IndexError:
             pass
-    print(verb_ending)
     return verb_ending
 
 def write_tags(verb_ending, politeness_formality_mappings, line_ja, line_en, out_en):
@@ -139,12 +146,12 @@ def write_tags(verb_ending, politeness_formality_mappings, line_ja, line_en, out
             if verb_ending.endswith(ending):
                 out_en.write(re.sub('^', '<' + key + '> ', line_en).strip() + '\n')
                 tagged = True
-                print(key + verb_ending + ' || ' + line_ja)
+                print('TAGGED AS ' + key + ' || ' +  verb_ending + ' || ' + line_ja)
                 break
         else:
             continue
     if tagged == False:
-        print('NO TAG ' + key + verb_ending + ' || ' + line_ja) 
+        print('NO TAG || ' + verb_ending + ' || ' + line_ja) 
         out_en.write(line_en.strip() + '\n')
     return tagged
 
