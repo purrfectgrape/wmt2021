@@ -35,7 +35,7 @@ politeness_formality_mappings = {
             'です',
             'ます',
             'でした',
-            'ました'
+            'ました',
             'まして',
             'ません',
             'でしょう',
@@ -129,19 +129,22 @@ def extract_verb_ending(line_ja):
                 index -= 1
         except IndexError:
             pass
+    print(verb_ending)
     return verb_ending
 
-def write_tags(verb_ending, politeness_formality_mappings, line_en, out_en):
+def write_tags(verb_ending, politeness_formality_mappings, line_ja, line_en, out_en):
     tagged = False
     for key, endings in politeness_formality_mappings.items():
         for ending in endings:
             if verb_ending.endswith(ending):
                 out_en.write(re.sub('^', '<' + key + '> ', line_en).strip() + '\n')
                 tagged = True
-                print(key + verb_ending)
+                print(key + verb_ending + ' || ' + line_ja)
                 break
-        break
+        else:
+            continue
     if tagged == False:
+        print('NO TAG ' + key + verb_ending + ' || ' + line_ja) 
         out_en.write(line_en.strip() + '\n')
     return tagged
 
@@ -155,7 +158,7 @@ with open(args.corpus + '-pofo-tagged.en', 'wt') as out_en:
                 line_ja = f_ja.readline()
                 line_ja = clean_up(line_ja)
                 verb_ending = extract_verb_ending(line_ja)
-                count += write_tags(verb_ending, politeness_formality_mappings, line_en, out_en)
+                count += write_tags(verb_ending, politeness_formality_mappings, line_ja, line_en, out_en)
                 nl += 1
 print('Number of lines tagged: ' + str(count))
                 
