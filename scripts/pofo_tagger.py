@@ -17,7 +17,7 @@ import re
 #
 ###############################################################################
 
-parser = argparse.ArgumentParser(description='Tool to extract bitext from the WikiMatrix')
+parser = argparse.ArgumentParser(description='Tool to tag formality and politeness levels to Japanese/English data.')
 parser.add_argument('--corpus', type=str, required=True,
     help='path to corpus with mined bitexts')
 parser.add_argument('--nb_sents', type=int, default=9999999999,
@@ -53,7 +53,7 @@ politeness_formality_mappings = {
             'じゃない',
             'ではない',
             'じゃなかった'
-            'い',  # risky?
+          #  'い',  # risky?
             'くて',     # i-adj endings
             'くない',
             'くなかった',
@@ -82,6 +82,7 @@ politeness_formality_mappings = {
             'された',
             'させた',
             'させられた',
+            'われる',
             'ている',
             'いる',
             'いた',
@@ -157,6 +158,7 @@ def write_tags(verb_ending, politeness_formality_mappings, line_ja, line_en, out
 
 nl = 0
 count = 0
+true_count = 0
 with open(args.corpus + '-pofo-tagged.en', 'wt') as out_en:
     with open(args.corpus + '.en', 'rt') as f_en:
         with open(args.corpus + '.ja', 'rt') as f_ja:
@@ -165,12 +167,11 @@ with open(args.corpus + '-pofo-tagged.en', 'wt') as out_en:
                 line_ja = f_ja.readline()
                 line_ja = clean_up(line_ja)
                 verb_ending = extract_verb_ending(line_ja)
-                count += write_tags(verb_ending, politeness_formality_mappings, line_ja, line_en, out_en)
+                count += write_tags(verb_ending, politeness_formality_mappings, line_ja, line_en, out_en)[0]
                 nl += 1
 print('Number of lines tagged: ' + str(count))
-                
-                                
-                                
-
-
+if sum(1 for line in open(args.corpus + '-pofo-tagged.en')) != args.nb_sents:
+    print('WARNING!!! Lines count in ' +  args.corpus + '-pofo-tagged.en' + ' is not equal to args.nb_sents!!. Likely due to double tagging.')
+else:
+    print('Line count as expected! Check file ' + args.corpus + '-pofo-tagged.en')
 
