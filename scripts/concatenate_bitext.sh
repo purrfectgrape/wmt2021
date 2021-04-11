@@ -17,7 +17,7 @@ while getopts ":c:" flag; do
           if [[ -f $BASE/data/$OPTARG/wmt2021-bitext.en ]]; then
             rm $BASE/data/$OPTARG/wmt2021-bitext.en
           fi
-	  for corpus in paracrawl news-commentary wikititles wikimatrix subtitles kftt ted dev; do
+	  for corpus in paracrawl news-commentary wikititles wikimatrix subtitles kftt ted; do
             cat $BASE/data/$OPTARG/$corpus.ja >> $BASE/data/$OPTARG/wmt2021-bitext.ja
 	    cat $BASE/data/$OPTARG/$corpus.en >> $BASE/data/$OPTARG/wmt2021-bitext.en
           done
@@ -30,7 +30,7 @@ while getopts ":c:" flag; do
       esac
     ;;
     \?)
-      echo "Invalid option: -$OPTARG. Specify a corpus using a -c flag. Usage: ./scripts/concatenate_bitext.sh -c raw. Argument must be one of train/raw, dev/raw, or test/raw" >&2
+      echo "Invalid option: -$OPTARG. Specify a corpus using a -c flag. Usage: ./scripts/concatenate_bitext.sh -c train/raw. Argument must be one of train/raw, dev/raw, or test/raw" >&2
       exit 1
     ;;
   esac

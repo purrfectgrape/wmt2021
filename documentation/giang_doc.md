@@ -38,6 +38,12 @@ wget -O /tmp/lid.176.bin https://dl.fbaipublicfiles.com/fasttext/supervised-mode
 ## Filter by lang-id
 python3 scripts/lang_id.py --conf_score=0.85
 
+## Sample 5M sentence pairs for training
+python3 scripts/sample_train_corpus.py --txt=data/train/raw/wmt2021-bitext-langid-filtered --nb-sents=5000000 --bitext=data/train/raw/sample_5m
+
+## Convert mixed orthography to Hiragana and Romaji
+python3 scripts/orthography_converter.py --infile=data/train/raw/sample_5m.ja --outfile=data/train/preprocessed/sample_5m_hiragana.ja --to_type=hira --nb_sents=5000000
+python3 scripts/orthography_converter.py --infile=data/train/raw/sample_5m.ja --outfile=data/train/preprocessed/sample_5m_romaji.ja --to_type=hepburn --nb_sents=5000000
 ## Preprocess EN data with Moses
 ### Training data
 ./scripts/moses_en.sh -c wmt2021-bitext<br>

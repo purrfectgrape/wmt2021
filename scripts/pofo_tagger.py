@@ -144,6 +144,7 @@ def extract_verb_ending(line_ja):
     return verb_ending
 
 # This is to eliminate the possiblity of double tagging. Find the longest match between the extracted ending and verb endings.
+
 def longest_match(verb_ending, politeness_formality_mappings, line_ja):
     matches_dict = {}
     for key, endings in politeness_formality_mappings.items():
@@ -192,10 +193,11 @@ with open(args.corpus + '-pofo-tagged.en', 'wt') as out_en:
             while nl < args.nb_sents:
                 line_en = f_en.readline()
                 line_ja = f_ja.readline()
+                if not line_ja:
+                    break
                 line_ja = clean_up(line_ja)
                 verb_ending = extract_verb_ending(line_ja)
                 counts += write_tags(verb_ending, politeness_formality_mappings, line_ja, line_en, out_en)
-                #longest_match(verb_ending, politeness_formality_mappings, line_ja)
                 nl += 1
 
 for i in counts:
