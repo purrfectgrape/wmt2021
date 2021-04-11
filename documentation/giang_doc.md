@@ -48,9 +48,16 @@ python3 scripts/lang_id.py --conf_score=0.85
 python3 scripts/sample_train_corpus.py --txt=data/train/raw/wmt2021-bitext-langid-filtered --nb-sents=8000000 --bitext=data/train/raw/sample-4m
 
 ## Convert mixed orthography to Hiragana and Romaji
+### Training data
 python3 scripts/orthography_converter.py --infile=data/train/raw/sample-4m --outfile=data/train/preprocessed/sample-4m-hiragana --to_type=hira --nb_sents=4000000
 python3 scripts/orthography_converter.py --infile=data/train/raw/sample-4m --outfile=data/train/preprocessed/sample-4m-romaji --to_type=hepburn --nb_sents=4000000
+### Dev data
+python3 scripts/orthography_converter_dev_test.py --infile=data/dev/raw/newsdev2020-jaen --outfile=data/dev/preprocessed/newsdev2020-jaen-hiragana --to_type=hira
+python3 scripts/orthography_converter_dev_test.py --infile=data/dev/raw/newsdev2020-jaen --outfile=data/dev/preprocessed/newsdev2020-jaen-romaji --to_type=hepburn
 
+### Dev data
+python3 scripts/orthography_converter.py --infile=data/dev/raw/newsdev2020-jaen-ref.en.sgm --outfile=data/dev/preprocessed/newsdev2020-jaen-ref-hiragana.en --to_type=hira
+python3 scripts/orthography_converter.py --infile=data/dev/raw/newsdev2020-jaen-ref.en.sgm --outfile=data/dev/preprocessed/newsdev2020-jaen-ref-romaji.en --to_type=hepburn
 ## Use sentencepiece to build vocab for 3 experiments(in that case no need to preprocess with moses, fugashi, etc.)
 python3 scripts/sentencepiece_orth_experiments.py
 

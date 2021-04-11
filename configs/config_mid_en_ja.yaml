@@ -1,0 +1,76 @@
+save_data: /nas/models/experiment/ja-en/wmt2021/models/
+
+src_vocab: /nas/models/experiment/ja-en/wmt2021/vocab/vocab.en
+tgt_vocab: /nas/models/experiment/ja-en/wmt2021/vocab/vocab.ja
+# overwrite: False
+overwrite: True
+data: 
+      corpus_mid:
+            path_src: /nas/models/experiment/ja-en/wmt2021/data/sentence_filtered/mid_corpus.en
+            path_tgt: /nas/models/experiment/ja-en/wmt2021/data/sentence_filtered/mid_corpus.ja
+            transforms: [sentencepiece, filtertoolong]
+      valid:
+            path_src: /nas/models/experiment/ja-en/wmt2021/data/raw/dev/newsdev2020-filtered.en
+            path_tgt: /nas/models/experiment/ja-en/wmt2021/data/raw/dev/newsdev2020-filtered.ja
+            transforms: [sentencepiece, filtertoolong]
+# General settings
+skip_empty_level: silent
+
+save_model: /nas/models/experiment/ja-en/wmt2021/models
+src_subword_model: /nas/models/experiment/ja-en/wmt2021/sentencepiece/en_mid.model
+tgt_subword_model: /nas/models/experiment/ja-en/wmt2021/sentencepiece/ja_mid.model
+src_subword_nbest: 1
+src_subword_alpha: 0.0
+tgt_subword_nbest: 1
+tgt_subword_alpha: 0.0
+
+#filter long sentences
+src_seq_length: 100
+tgt_seq_length: 100
+
+save_checkpoint_steps: 1000
+keep_checkpoint: 10
+seed: 1234
+train_steps: 20000
+valid_steps: 1000
+warmup_steps: 800
+report_every: 100
+
+# Batching
+queue_size: 10000
+world_size: 1
+gpu_ranks: [0]
+batch_type: "tokens"
+batch_size: 4096
+valid_batch_size: 8
+max_generator_batches: 2
+accum_count: [4]
+accum_steps: [0]
+
+# Optimization
+model_dtype: "fp32"
+optim: "adam"
+learning_rate: 2
+warmup_steps: 8000
+decay_method: "noam"
+adam_beta2: 0.998
+max_grad_norm: 0
+label_smoothing: 0.1
+param_init: 0
+param_init_glorot: true
+normalization: "tokens"
+
+# Model
+encoder_type: transformer
+decoder_type: transformer
+position_encoding: true
+enc_layers: 6
+dec_layers: 6
+heads: 8
+rnn_size: 512
+word_vec_size: 512
+transformer_ff: 2048
+dropout_steps: [0]
+dropout: [0.1]
+attention_dropout: [0.1]
+
