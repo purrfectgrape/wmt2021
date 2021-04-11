@@ -50,6 +50,10 @@ python3 scripts/sample_train_corpus.py --txt=data/train/raw/wmt2021-bitext-langi
 ## Convert mixed orthography to Hiragana and Romaji
 python3 scripts/orthography_converter.py --infile=data/train/raw/sample-4m --outfile=data/train/preprocessed/sample-4m-hiragana --to_type=hira --nb_sents=4000000
 python3 scripts/orthography_converter.py --infile=data/train/raw/sample-4m --outfile=data/train/preprocessed/sample-4m-romaji --to_type=hepburn --nb_sents=4000000
+
+## Use sentencepiece to build vocab for 3 experiments(in that case no need to preprocess with moses, fugashi, etc.)
+python3 scripts/sentencepiece_orth_experiments.py
+
 ## Preprocess EN data with Moses
 ### Training data
 ./scripts/moses_en.sh -c wmt2021-bitext<br>
