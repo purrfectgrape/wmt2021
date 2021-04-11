@@ -50,20 +50,24 @@ def write_to_file(sents, file, type):
 
 # Transform the raw data to different script types (romaji or hiragana)
 nl = 0
-with open(args.infile, 'rt', encoding=args.encoding) as infile:
-    with open(args.outfile, 'wt', encoding=args.encoding) as outfile:
-        while nl < args.nb_sents:
-            line = infile.readline()
-            if not line:
-                break
-            converted = kks.convert(line)
-            sents_list = []
-            for token in converted:
-                sents_list.append(token[args.to_type].strip())
-            outfile.write(''.join(sents_list) + '\n')
-            nl += 1
-            if nl % 100000 == 0:
-                print('\r - {:d} lines read'.format(nl), end='')
+with open(args.infile + '.ja', 'rt', encoding=args.encoding) as infile_ja:
+    with open(args.infile + '.en', 'rt', encoding=args.encoding) as infile_en:
+        with open(args.outfile + '.ja', 'wt', encoding=args.encoding) as outfile_ja:
+            with open(args.outfile + '.en', 'wt', encoding=args.encoding) as outfile_en:
+                while nl < args.nb_sents:
+                    line_ja = infile_ja.readline()
+                    line_en = infile_en.readline()
+                    if not line_ja or not line_en:
+                        break
+                    converted = kks.convert(line_ja)
+                    sents_list = []
+                    for token in converted:
+                        sents_list.append(token[args.to_type].strip())
+                    outfile_ja.write(''.join(sents_list) + '\n')
+                    outfile_en.write(line_en.strip() + '\n')
+                    nl += 1
+                    if nl % 10000 == 0:
+                        print('\r - {:d} lines read'.format(nl), end='')
 
 print('\r - wrote {:d} lines'.format(nl))
 
