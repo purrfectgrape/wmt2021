@@ -12,13 +12,17 @@ while getopts ":c:" flag; do
     c)
       case $OPTARG in
         train/raw | dev/raw | test/raw)
-	  for corpus in paracrawl news-commentary wikititles wikimatrix subtitles kftt ted dev; do
+	  TOTAL_JA=0
+	  TOTAL_EN=0
+	  for corpus in paracrawl news-commentary wikititles wikimatrix subtitles kftt ted; do
             if [[ ! -f $BASE/data/$OPTARG/$corpus.ja || ! -f $BASE/data/$OPTARG/$corpus.en ]]; then
 	      echo "$BASE/data/$OPTARG/$corpus.ja"
               echo "$OPTARG $corpus: not found"
             else
               SENTS_COUNT_JA=$(wc -l < $BASE/data/$OPTARG/$corpus.ja)
               SENTS_COUNT_EN=$(wc -l < $BASE/data/$OPTARG/$corpus.en)
+	      TOTAL_JA=$((TOTAL_JA+SENTS_COUNT_JA))
+	      TOTAL_EN=$((TOTAL_EN+SENTS_COUNT_EN))
               echo "$OPTARG $corpus: $SENTS_COUNT_JA"
               echo "$OPTARG $corpus: $SENTS_COUNT_EN"
 	      if [[ $SENTS_COUNT_JA != $SENTS_COUNT_EN ]]; then
@@ -26,6 +30,8 @@ while getopts ":c:" flag; do
 	      fi
             fi
           done
+	  echo "Total number of sentences in Japanese: $TOTAL_JA"
+	  echo "Total number of sentences in English: $TOTAL_EN"
         ;;   
         *)
 	  echo "Invalid argument: $OPTARG. Usage: ./scripts/get_corpus_stats.sh -c raw. Argument must be one of train/raw, dev/raw, or test/raw or others" >&2
