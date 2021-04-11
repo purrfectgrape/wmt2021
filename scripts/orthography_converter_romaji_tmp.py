@@ -63,10 +63,7 @@ with open(args.infile + '.ja', 'rt', encoding=args.encoding) as infile_ja:
                     sents_list = []
                     for token in converted:
                         sents_list.append(token[args.to_type].strip())
-                    if args.to_type=='hepburn':
-                        outfile_ja.write(' '.join(sents_list) + '\n')
-                    elif args.to_type=='hira':
-                        outfile_ja.write(''.join(sents_list) + '\n')
+                    outfile_ja.write(' '.join(sents_list) + '\n')
                     outfile_en.write(line_en.strip() + '\n')
                         
                     nl += 1

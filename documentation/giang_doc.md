@@ -11,6 +11,12 @@ cd //nas/models/experiment/ja-en/wmt2021
 (To get individual corpora: run ./scripts/get_data.sh -c ted for example)
 
 ## Extract sentences from each corpus
+
+### Download ted talks processing tools
+gdown --id 1-wmonUKD3WBy8va8_88O9UcSSw2Wy4zj
+unzip tools_2012.zip -d libraries/ted_tools
+rm tools_2012.zip
+
 ### Training data
 python3 scripts/extract_wikimatrix.py --src-lang=en --trg-lang=ja --tsv=data/wmt2021/wikimatrix/WikiMatrix.v1.en-ja.langid.tsv --bitext=data/train/raw/wikimatrix<br> 
 python3 scripts/extract_paracrawl.py --txt data/wmt2021/paracrawl/en-ja/en-ja.bicleaner05.txt --bitext data/train/raw/paracrawl --threshold=0.730<br>
