@@ -10,3 +10,7 @@ spm.SentencePieceTrainer.train(input='data/train/raw/sample-4m.ja', model_prefix
 print('build vocab for hiragana model')
 spm.SentencePieceTrainer.train(input='data/train/preprocessed/sample-4m-hiragana.en', model_prefix='sentencepiece/hiragana_sample_4m.en', vocab_size=32000, character_coverage=1.0)
 spm.SentencePieceTrainer.train(input='data/train/preprocessed/sample-4m-hiragana.ja', model_prefix='sentencepiece/hiragana_sample_4m.ja', vocab_size=32000, character_coverage=1.0)
+
+print('build vocab for romaji model')
+spm.SentencePieceTrainer.train(input='data/train/preprocessed/sample-4m-romaji.en', model_prefix='sentencepiece/romaji_sample_4m.en', vocab_size=32000, character_coverage=1.0)
+spm.SentencePieceTrainer.train(input='data/train/preprocessed/sample-4m-romaji.ja', model_prefix='sentencepiece/romaji_sample_4m.ja', vocab_size=32000, character_coverage=1.0)

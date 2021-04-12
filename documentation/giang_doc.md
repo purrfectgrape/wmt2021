@@ -55,11 +55,16 @@ python3 scripts/orthography_converter.py --infile=data/train/raw/sample-4m --out
 python3 scripts/orthography_converter_dev_test.py --infile=data/dev/raw/newsdev2020-jaen --outfile=data/dev/preprocessed/newsdev2020-jaen-hiragana --to_type=hira
 python3 scripts/orthography_converter_dev_test.py --infile=data/dev/raw/newsdev2020-jaen --outfile=data/dev/preprocessed/newsdev2020-jaen-romaji --to_type=hepburn
 
-### Dev data
-python3 scripts/orthography_converter.py --infile=data/dev/raw/newsdev2020-jaen-ref.en.sgm --outfile=data/dev/preprocessed/newsdev2020-jaen-ref-hiragana.en --to_type=hira
-python3 scripts/orthography_converter.py --infile=data/dev/raw/newsdev2020-jaen-ref.en.sgm --outfile=data/dev/preprocessed/newsdev2020-jaen-ref-romaji.en --to_type=hepburn
 ## Use sentencepiece to build vocab for 3 experiments(in that case no need to preprocess with moses, fugashi, etc.)
 python3 scripts/sentencepiece_orth_experiments.py
+
+## Train model
+scripts/train_hiragana_4m.sh (the config file needs to be properly set up. See configs/hiragana_4m_ja_en.yaml for the config)
+For the above command to work, onmt needs to version 2.0. Update by running pip3 install --upgrade OpenNMT-py==2.0.0rc1 --prefix=$HOME/.local
+. This will be installed to /home/gianghl2/.local
+The command below will also install pytorch with 10.1 cuda driver.
+pip3 install --prefix=$HOME/.local torch==1.7.1+cu101 torchvision==0.8.2+cu101 torchaudio==0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
+vim ~/.bashrc to export PYTHONPATH with the above dir, then source
 
 ## Preprocess EN data with Moses
 ### Training data
