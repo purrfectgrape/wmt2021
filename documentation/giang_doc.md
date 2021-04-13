@@ -60,11 +60,15 @@ python3 scripts/sentencepiece_orth_experiments.py
 
 ## Train model
 scripts/train_hiragana_4m.sh (the config file needs to be properly set up. See configs/hiragana_4m_ja_en.yaml for the config)
+scripts/train_baseline_4m.sh
+scripts/train_romaji_4m.sh
 For the above command to work, onmt needs to version 2.0. Update by running pip3 install --upgrade OpenNMT-py==2.0.0rc1 --prefix=$HOME/.local
 . This will be installed to /home/gianghl2/.local
 The command below will also install pytorch with 10.1 cuda driver.
 pip3 install --prefix=$HOME/.local torch==1.7.1+cu101 torchvision==0.8.2+cu101 torchaudio==0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
 vim ~/.bashrc to export PYTHONPATH with the above dir, then source
+
+## Translate and Eval
 
 ## Preprocess EN data with Moses
 ### Training data
