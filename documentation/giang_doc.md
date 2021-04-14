@@ -54,7 +54,9 @@ python3 scripts/orthography_converter.py --infile=data/train/raw/sample-4m --out
 ### Dev data
 python3 scripts/orthography_converter_dev_test.py --infile=data/dev/raw/newsdev2020-jaen --outfile=data/dev/preprocessed/newsdev2020-jaen-hiragana --to_type=hira
 python3 scripts/orthography_converter_dev_test.py --infile=data/dev/raw/newsdev2020-jaen --outfile=data/dev/preprocessed/newsdev2020-jaen-romaji --to_type=hepburn
-
+### Test data
+python3 scripts/orthography_converter_dev_test.py --infile=data/test/raw/newstest2020-jaen --outfile=data/test/preprocessed/newstest2020-jaen-hiragana --to_type=hira
+python3 scripts/orthography_converter_dev_test.py --infile=data/test/raw/newstest2020-jaen --outfile=data/test/preprocessed/newstest2020-jaen-romaji --to_type=hepburn
 ## Use sentencepiece to build vocab for 3 experiments(in that case no need to preprocess with moses, fugashi, etc.)
 python3 scripts/sentencepiece_orth_experiments.py
 

@@ -1,0 +1,147 @@
+# Error from bpe for test data (en)
+
+./scripts/learn_bpe_test.sh -l en
+Learn byte pair encoding for en
+./scripts/learn_bpe_test.sh: line 23: ./scripts/../data/test/preprocessed/newstest2020-enja-ref-tok.en: No such file or directory
+./scripts/learn_bpe_test.sh: line 24: ./scripts/../data/test/preprocessed/newstest2020-enja-ref-tok.en: No such file or directory
+no pair has frequency >= 2. Stopping
+no pair has frequency >= 2. Stopping
+Traceback (most recent call last):
+  File "/home/gianghl2/.local/bin/subword-nmt", line 11, in <module>
+    load_entry_point('subword-nmt==0.3.7', 'console_scripts', 'subword-nmt')()
+  File "/home/gianghl2/.local/lib/python2.7/site-packages/subword_nmt/subword_nmt.py", line 49, in main
+    is_dict=args.dict_input, total_symbols=args.total_symbols)
+  File "/home/gianghl2/.local/lib/python2.7/site-packages/subword_nmt/learn_bpe.py", line 296, in learn_bpe
+    threshold = max(stats.values()) / 10
+ValueError: max() arg is an empty sequence
+Error: invalid line 2 in BPE codes file: 
+The line should exist of exactly two subword units, separated by whitespace# Error from using GPU[1]
+[2021-03-07 18:17:37,719 INFO] Loading dataset from //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/corpus_mid.train.0.pt
+[2021-03-07 18:17:53,333 INFO] number of examples: 834533
+[2021-03-07 18:18:25,577 INFO] Loading dataset from //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/corpus_mid.train.1.pt
+[2021-03-07 18:18:48,264 INFO] number of examples: 833970
+[2021-03-07 18:19:16,261 INFO] Loading dataset from //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/corpus_mid.train.2.pt
+[2021-03-07 18:19:30,878 INFO] number of examples: 834060
+[2021-03-07 18:19:59,581 INFO] Loading dataset from //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/corpus_mid.train.3.pt
+[2021-03-07 18:20:20,714 INFO] number of examples: 894997
+[2021-03-07 18:20:49,682 INFO] Loading dataset from //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/corpus_mid.train.4.pt
+[2021-03-07 18:21:04,558 INFO] number of examples: 940428
+[2021-03-07 18:21:34,629 INFO] Loading dataset from //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/corpus_mid.train.5.pt
+[2021-03-07 18:21:52,894 INFO] number of examples: 939450
+[2021-03-07 18:22:23,396 INFO] Loading dataset from //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/corpus_mid.train.6.pt
+[2021-03-07 18:22:32,746 INFO] number of examples: 382325
+Traceback (most recent call last):
+  File "/opt/python/3.7/venv/pytorch1.3_cuda10.0/bin/onmt_train", line 11, in <module>
+    sys.exit(main())
+  File "/opt/python/3.7/venv/pytorch1.3_cuda10.0/lib/python3.7/site-packages/onmt/bin/train.py", line 200, in main
+    train(opt)
+  File "/opt/python/3.7/venv/pytorch1.3_cuda10.0/lib/python3.7/site-packages/onmt/bin/train.py", line 82, in train
+    p.join()
+  File "/usr/lib/python3.7/multiprocessing/process.py", line 140, in join
+    res = self._popen.wait(timeout)
+  File "/usr/lib/python3.7/multiprocessing/popen_fork.py", line 48, in wait
+    return self.poll(os.WNOHANG if timeout == 0.0 else 0)
+  File "/usr/lib/python3.7/multiprocessing/popen_fork.py", line 28, in poll
+    pid, sts = os.waitpid(self.pid, flag)
+  File "/opt/python/3.7/venv/pytorch1.3_cuda10.0/lib/python3.7/site-packages/onmt/bin/train.py", line 184, in signal_handler
+    raise Exception(msg)
+Exception: 
+
+-- Tracebacks above this line can probably
+                 be ignored --
+
+Traceback (most recent call last):
+  File "/opt/python/3.7/venv/pytorch1.3_cuda10.0/lib/python3.7/site-packages/onmt/bin/train.py", line 138, in run
+    gpu_rank = onmt.utils.distributed.multi_init(opt, device_id)
+  File "/opt/python/3.7/venv/pytorch1.3_cuda10.0/lib/python3.7/site-packages/onmt/utils/distributed.py", line 27, in multi_init
+    world_size=dist_world_size, rank=opt.gpu_ranks[device_id])
+  File "/opt/python/3.7/venv/pytorch1.3_cuda10.0/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py", line 400, in init_process_group
+    store, rank, world_size = next(rendezvous(url))
+  File "/opt/python/3.7/venv/pytorch1.3_cuda10.0/lib/python3.7/site-packages/torch/distributed/rendezvous.py", line 95, in _tcp_rendezvous_handler
+    store = TCPStore(result.hostname, result.port, world_size, start_daemon)
+RuntimeError: connect() timed out.
+
+
+# Output from buildvocab (corpus_mid)
+
+onmt_preprocess -train_src //nas/models/experiment/ja-en/wmt2021/data/preprocessed/corpus_mid.ja -train_tgt //nas/models/experiment/ja-en/wmt2021/data/preprocessed/corpus_mid.en -valid_src //nas/models/experiment/ja-en/wmt2021/data/preprocessed/dev/newsdev2020-tok.ja -valid_tgt //nas/models/experiment/ja-en/wmt2021/data/preprocessed/dev/newsdev2020-tok.en -save_data //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/ -overwrite
+[2021-03-07 02:59:03,406 INFO] Extracting features...
+[2021-03-07 02:59:03,407 INFO]  * number of source features: 0.
+[2021-03-07 02:59:03,407 INFO]  * number of target features: 0.
+[2021-03-07 02:59:03,407 INFO] Building `Fields` object...
+[2021-03-07 02:59:03,407 INFO] Building & saving training data...
+[2021-03-07 02:59:06,487 INFO] Building shard 0.
+[2021-03-07 02:59:54,331 INFO]  * saving 0th train data shard to //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/.train.0.pt.
+[2021-03-07 03:00:53,111 INFO] Building shard 1.
+[2021-03-07 03:01:38,561 INFO]  * saving 1th train data shard to //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/.train.1.pt.
+[2021-03-07 03:02:38,625 INFO] Building shard 2.
+[2021-03-07 03:03:24,383 INFO]  * saving 2th train data shard to //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/.train.2.pt.
+[2021-03-07 03:04:25,750 INFO] Building shard 3.
+[2021-03-07 03:05:09,712 INFO]  * saving 3th train data shard to //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/.train.3.pt.
+[2021-03-07 03:06:06,690 INFO] Building shard 4.
+[2021-03-07 03:06:47,523 INFO]  * saving 4th train data shard to //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/.train.4.pt.
+[2021-03-07 03:07:37,793 INFO] Building shard 5.
+[2021-03-07 03:08:16,686 INFO]  * saving 5th train data shard to //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/.train.5.pt.
+[2021-03-07 03:09:00,654 INFO] Building shard 6.
+[2021-03-07 03:09:15,681 INFO]  * saving 6th train data shard to //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/.train.6.pt.
+[2021-03-07 03:09:35,021 INFO]  * tgt vocab size: 50004.
+[2021-03-07 03:09:36,257 INFO]  * src vocab size: 50002.
+[2021-03-07 03:09:39,054 INFO] Building & saving validation data...
+[2021-03-07 03:09:41,595 INFO] Building shard 0.
+[2021-03-07 03:09:41,796 INFO]  * saving 0th valid data shard to //nas/models/experiment/ja-en/wmt2021/data/opennmt-vocab/.valid.0.pt.
+
+# Output from parallel_processing
+
+WORD COUNT:
+corpus:  train-bl
+   49999 scripts/../data/train-bl-tok-bpe.en
+   49999 scripts/../data/train-bl-tok-bpe.ja
+   99998 total
+hiragana:  train-bl
+   49999 scripts/../data/train-bl-tok-bpe-hiragana.en
+   49999 scripts/../data/train-bl-tok-bpe-hiragana.ja
+   99998 total
+romaji:  train-bl
+   49999 scripts/../data/train-bl-tok-bpe-romaji.en
+   49999 scripts/../data/train-bl-tok-bpe-romaji.ja
+   99998 tota
+
+(pytorch1.3_cuda10.0) gianghl2@qivalluk://nas/models/experiment/ja-en/wmt2021$ sh scripts/build_vocab.sh -c bl
+scripts/build_vocab.sh: 9: scripts/build_vocab.sh: source: not found
+Build vocab for mixed scripts
+[2021-02-21 15:20:32,638 INFO] Extracting features...
+[2021-02-21 15:20:32,640 INFO]  * number of source features: 0.
+[2021-02-21 15:20:32,640 INFO]  * number of target features: 0.
+[2021-02-21 15:20:32,640 INFO] Building `Fields` object...
+[2021-02-21 15:20:32,640 INFO] Building & saving training data...
+[2021-02-21 15:20:32,774 INFO] Building shard 0.
+[2021-02-21 15:20:34,551 INFO]  * saving 0th train data shard to //nas/models/experiment/ja-en/wmt2021/data/OpenNMT-data-bl.train.0.pt.
+[2021-02-21 15:20:37,000 INFO]  * tgt vocab size: 21639.
+[2021-02-21 15:20:37,029 INFO]  * src vocab size: 19277.
+[2021-02-21 15:20:37,160 INFO] Building & saving validation data...
+Build vocab for hiragana
+[2021-02-21 15:20:37,896 INFO] Extracting features...
+[2021-02-21 15:20:37,899 INFO]  * number of source features: 0.
+[2021-02-21 15:20:37,899 INFO]  * number of target features: 0.
+[2021-02-21 15:20:37,899 INFO] Building `Fields` object...
+[2021-02-21 15:20:37,899 INFO] Building & saving training data...
+[2021-02-21 15:20:38,047 INFO] Building shard 0.
+[2021-02-21 15:20:39,870 INFO]  * saving 0th train data shard to //nas/models/experiment/ja-en/wmt2021/data/OpenNMT-data-bl-hiragana.train.0.pt.
+[2021-02-21 15:20:42,357 INFO]  * tgt vocab size: 21642.
+[2021-02-21 15:20:42,382 INFO]  * src vocab size: 17146.
+[2021-02-21 15:20:42,517 INFO] Building & saving validation data...
+Build vocab for romaji
+[2021-02-21 15:20:43,242 INFO] Extracting features...
+[2021-02-21 15:20:43,244 INFO]  * number of source features: 0.
+[2021-02-21 15:20:43,244 INFO]  * number of target features: 0.
+[2021-02-21 15:20:43,244 INFO] Building `Fields` object...
+[2021-02-21 15:20:43,244 INFO] Building & saving training data...
+[2021-02-21 15:20:43,372 INFO] Building shard 0.
+[2021-02-21 15:20:45,112 INFO]  * saving 0th train data shard to //nas/models/experiment/ja-en/wmt2021/data/OpenNMT-data-bl-romaji.train.0.pt.
+[2021-02-21 15:20:47,403 INFO]  * tgt vocab size: 21651.
+[2021-02-21 15:20:47,429 INFO]  * src vocab size: 16803.
+[2021-02-21 15:20:47,547 INFO] Building & saving validation data...l
+
+
+
+20210310-061206

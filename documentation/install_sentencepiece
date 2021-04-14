@@ -1,0 +1,12 @@
+# Notes on how to install sentencepiece command line tools
+
+# Follow the directions in https://github.com/google/sentencepiece, but instead of doing sudo make install (which I can't do, because I don't have sudo privileges), do
+
+vim cmake_install.cmake
+
+# Update line 5:
+set(CMAKE_INSTALL_PREFIX "/home/gianghl2/.local") on line 5 of file cmake_install.cmake of the build dir.
+
+# Export export MY_INSTALL_DIR=$HOME/.local in ~/.bashrc and then source.
+
+# Finally, run make install
