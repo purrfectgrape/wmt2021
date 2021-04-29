@@ -1,3 +1,28 @@
+# Steps for fast_align experiment
+## Create file for fast_align
+cat data/train/raw/sample-4m.en | libraries/moses/scripts/tokenizer/lowercase.perl | libraries/moses/scripts/tokenizer/normalize-punctuation.perl -l en | libraries/moses/scripts/tokenizer/remove-non-printing-char.perl -l en | libraries/moses/scripts/tokenizer/tokenizer.perl -no-escape -l en > data/alignment/fast_align_sample.en
+python3 scripts/tokenize_japanese.py --input=data/train/raw/sample-4m.ja --output=data/alignment/fast_align_sample.ja
+python3 scripts/prepare_bitext.py
+
+## Run fast_align
+cd libraries/fast_align/build
+cmake ..
+make
+./fast_align  -i //nas/models/experiment/ja-en/wmt2021/fast_align_sample.bitext -d -o -v > data/alignment/forward.enja.align
+./fast_align -i //nas/models/experiment/ja-en/wmt2021/fast_align_sample.bitext -d -o -v -r  > data/alignment/reverse.jaen.align
+
+## Tokenize using sentencepiece
+spm_encode --model=sentencepiece/baseline_sample_4m.en.model --output_format=piece < data/train/raw/sample-4m.en > //nas/models/experiment/ja-en/wmt2021/data/alignment/sample-4m.en.sp
+spm_encode --model=sentencepiece/baseline_sample_4m.ja.model --output_format=piece < data/train/raw/sample-4m.ja > //nas/models/experiment/ja-en/wmt2021/data/alignment/sample-4m.ja.sp
+
+spm_encode --model=sentencepiece/baseline_sample_4m.en.model --output_format=piece < /nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020-jaen-ref.en.sgm > data/alignment/dev.en.sp
+
+spm_encode --model=sentencepiece/baseline_sample_4m.ja.model --output_format=piece < /nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020-jaen-src.ja.sgm > data/alignment/dev.ja.sp
+
+## Train
+./scripts/train_alignment_4m.sh 
+
+
 # Politeness tagger
 python scripts/pofo_tagger.py --corpus=data/train/raw/paracrawl --nb_sents=10000
 
@@ -71,6 +96,10 @@ pip3 install --prefix=$HOME/.local torch==1.7.1+cu101 torchvision==0.8.2+cu101 t
 vim ~/.bashrc to export PYTHONPATH with the above dir, then source
 
 ## Translate and Eval
+./scripts/preprocess_test_4m.sh
+./scripts/eval_hiragana_4m.sh
+./scripts/eval_romaji_4m.sh
+./scripts/eval_baseline_4m.sh
 
 ## Preprocess EN data with Moses
 ### Training data
