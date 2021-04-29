@@ -1,3 +1,9 @@
+# Steps for base experiment
+## Extracting train files
+similar to before, but paracrawl is saved in paracrawl-all
+
+## Concatenate
+./scripts/concatenate_bitext_transformer_base.sh -c train/raw
 # Steps for fast_align experiment
 ## Create file for fast_align
 cat data/train/raw/sample-4m.en | libraries/moses/scripts/tokenizer/lowercase.perl | libraries/moses/scripts/tokenizer/normalize-punctuation.perl -l en | libraries/moses/scripts/tokenizer/remove-non-printing-char.perl -l en | libraries/moses/scripts/tokenizer/tokenizer.perl -no-escape -l en > data/alignment/fast_align_sample.en
@@ -43,7 +49,7 @@ unzip tools_2012.zip -d libraries/ted_tools
 rm tools_2012.zip
 
 ### Training data
-python3 scripts/extract_wikimatrix.py --src-lang=en --trg-lang=ja --tsv=data/wmt2021/wikimatrix/WikiMatrix.v1.en-ja.langid.tsv --bitext=data/train/raw/wikimatrix<br> 
+python3 scripts/extract_wikimatrix.py --threshold=1.0 --src-lang=en --trg-lang=ja --tsv=data/wmt2021/wikimatrix/WikiMatrix.v1.en-ja.langid.tsv --bitext=data/train/raw/wikimatrix<br> 
 python3 scripts/extract_paracrawl.py --txt data/wmt2021/paracrawl/en-ja/en-ja.bicleaner05.txt --bitext data/train/raw/paracrawl --threshold=0.730<br>
 python3 scripts/extract_ted.py --jaen=data/wmt2021/ted/2017-01-trnted/texts/ja/en/ja-en.tgz --enja=data/wmt2021/ted/2017-01-trnted/texts/en/ja/en-ja.tgz --out_dir=data/train/raw<br>
 python3 scripts/extract_kftt.py --in_dir=data/wmt2021/kftt/kftt-data-1.0/data --out_dir=data/train/raw (this is for orig data. for tok type, specify --type=tok)<br>

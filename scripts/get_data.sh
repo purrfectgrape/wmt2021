@@ -75,7 +75,7 @@ data_loc() {
         echo "http://data.statmt.org/wikititles/v3/wikititles-v3.ja-en.tsv"
     fi
     if [[ $1 == "wikimatrix" ]]; then
-        echo "http://data.statmt.org/wmt20/translation-task/WikiMatrix/WikiMatrix.v1.en-ja.langid.tsv.gz"
+        echo "http://data.statmt.org/wmt21/translation-task/WikiMatrix/WikiMatrix.v1.en-ja.langid.tsv.gz"
     fi
     if [[ $1 == "subtitles" ]]; then
         echo "https://nlp.stanford.edu/projects/jesc/data/raw.tar.gz"
@@ -86,6 +86,7 @@ data_loc() {
     if [[ $1 == "ted" ]]; then
 	# Ted talks data are shared via Google Drive so we will download it with gdown and by the file id.
         echo "1gFeuPTRc3RB4DhJEkhr8O-a8PObM7Ix2"
+	#echo "http://data.statmt.org/wmt20/translation-task/ja-en/ted.en-ja.tgz"
     fi
 
     # monolingual data

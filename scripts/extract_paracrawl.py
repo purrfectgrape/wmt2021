@@ -17,7 +17,7 @@ parser.add_argument('--txt', type=str, required=True,
     help='File with paracrawl bitext')
 parser.add_argument('--bitext', type=str, required=True,
     help='Text file after sentence splitting')
-parser.add_argument('--threshold', type=float, default=0.7,
+parser.add_argument('--threshold', type=float, default=0.0,
     help='Threshold of alignment score')
 parser.add_argument('--nb-sents', type=int, default=999999999,
     help='Maximal number of sentences')

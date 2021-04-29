@@ -37,7 +37,7 @@ parser.add_argument('--src-lang', type=str, required=True,
     help='Source language')
 parser.add_argument('--trg-lang', type=str, required=True,
     help='Traget language')
-parser.add_argument('--threshold', type=float, default=1.0,
+parser.add_argument('--threshold', type=float, default=0.0,
     help='Threshold on margin score')
 parser.add_argument('--nb_sents', type=int, default=999999999,
     help='Maximal number of sentences')
