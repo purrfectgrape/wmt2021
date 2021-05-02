@@ -1,15 +1,33 @@
-# Steps for base experiment
+# Steps for transformer big setting on 4m ja>en data. Set the GPU number by adding a number at the end of the command.
+scripts/train.sh configs/big_4m_ja_en.yaml 0
+
+# Steps for base experiment (biggest data possible)
 ## Extracting train files
-similar to before, but paracrawl is saved in paracrawl-all
+Similar to before, but do not specify threshold for paracrawl and wikimatrix. paracrawl is saved in paracrawl-all
 
 ## Concatenate
 ./scripts/concatenate_bitext_transformer_base.sh -c train/raw
+
+## Build vocab
+spm_train --input=data/train/raw/transformer-base.en --train_extremely_large_corpus=true --vocab_size=32000 --character_coverage=1 --input_sentence_size=7000000 --shuffle_input_sentence=true --model_prefix=sentencepiece/transformer_base.en
+spm_train --input=data/train/raw/transformer-base.ja --train_extremely_large_corpus=true --vocab_size=32000 --character_coverage=0.9995 --input_sentence_size=7000000 --shuffle_input_sentence=true --model_prefix=sentencepiece/transformer_base.ja
+
+## Train
+scripts/train.sh configs/transformer_base_ja_en.yaml 0
+
+## Encode test set
+spm_encode --model=sentencepiece/transformer_base.ja.model < data/test/raw/newstest2020-jaen-src.ja.sgm > data/test/preprocessed/newstest2020-jaen-transformer-base.sp.ja
+spm_encode --model=sentencepiece/transformer_base.en.model < data/test/raw/newstest2020-jaen-src.en.sgm > data/test/preprocessed/newstest2020-jaen-transformer-base.sp.en
+
+## Translate and Eval
+./scripts/eval_transformer_base.sh
+
 # Steps for fast_align experiment
 ## Create file for fast_align
-cat data/train/raw/sample-4m.en | libraries/moses/scripts/tokenizer/lowercase.perl | libraries/moses/scripts/tokenizer/normalize-punctuation.perl -l en | libraries/moses/scripts/tokenizer/remove-non-printing-char.perl -l en | libraries/moses/scripts/tokenizer/tokenizer.perl -no-escape -l en > data/alignment/fast_align_sample.en
-python3 scripts/tokenize_japanese.py --input=data/train/raw/sample-4m.ja --output=data/alignment/fast_align_sample.ja
-python3 scripts/prepare_bitext.py
 
+spm_encode --model=sentencepiece/baseline_sample_4m.en.model --output_format=piece < data/train/raw/sample-4m.en | sed 's/▁//g' > data/alignment/fast_align_sample.en
+spm_encode --model=sentencepiece/baseline_sample_4m.ja.model --output_format=piece < data/train/raw/sample-4m.ja | sed 's/▁//g' > data/alignment/fast_align_sample.ja
+python3 scripts/prepare_bitext.py
 ## Run fast_align
 cd libraries/fast_align/build
 cmake ..
@@ -26,8 +44,10 @@ spm_encode --model=sentencepiece/baseline_sample_4m.en.model --output_format=pie
 spm_encode --model=sentencepiece/baseline_sample_4m.ja.model --output_format=piece < /nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020-jaen-src.ja.sgm > data/alignment/dev.ja.sp
 
 ## Train
-./scripts/train_alignment_4m.sh 
+scripts/train.sh configs/alignment_4m_ja_en.yaml 0
 
+## Translate and eval
+./scripts/eval_alignment_4m.sh
 
 # Politeness tagger
 python scripts/pofo_tagger.py --corpus=data/train/raw/paracrawl --nb_sents=10000
@@ -92,15 +112,16 @@ python3 scripts/orthography_converter_dev_test.py --infile=data/test/raw/newstes
 python3 scripts/sentencepiece_orth_experiments.py
 
 ## Train model
-scripts/train_hiragana_4m.sh (the config file needs to be properly set up. See configs/hiragana_4m_ja_en.yaml for the config)
-scripts/train_baseline_4m.sh
-scripts/train_romaji_4m.sh
-For the above command to work, onmt needs to version 2.0. Update by running pip3 install --upgrade OpenNMT-py==2.0.0rc1 --prefix=$HOME/.local
+To start training,  onmt needs to version 2.0. Update by running pip3 install --upgrade OpenNMT-py==2.0.0rc1 --prefix=$HOME/.local
 . This will be installed to /home/gianghl2/.local
 The command below will also install pytorch with 10.1 cuda driver.
 pip3 install --prefix=$HOME/.local torch==1.7.1+cu101 torchvision==0.8.2+cu101 torchaudio==0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
 vim ~/.bashrc to export PYTHONPATH with the above dir, then source
 
+scripts/train.sh configs/hiragana_4m_ja_en.yaml
+scripts/train.sh configs/baseline_4m.sh
+scripts/train.sh configs/romaji_4m_ja_en.yaml
+scripts/train.sh configs/baseline_4m_big.sh # Use Transformer big setting
 ## Translate and Eval
 ./scripts/preprocess_test_4m.sh
 ./scripts/eval_hiragana_4m.sh

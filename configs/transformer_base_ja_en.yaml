@@ -1,0 +1,73 @@
+# This config is copied from https://opennmt.net/OpenNMT-py/FAQ.html#how-do-i-use-the-transformer-model
+seed: 1111
+# Data
+save_data: models/transformer_base
+src_vocab: models/transformer_base.vocab.src
+tgt_vocab: models/transformer_base.vocab.tgt
+overwrite: True
+data: 
+      corpus:
+            path_src: data/train/raw/transformer-base.ja
+            path_tgt: data/train/raw/transformer-base.en
+            transforms: [filtertoolong, sentencepiece]
+      valid:
+            path_src: data/dev/raw/newsdev2020-jaen-src.ja.sgm
+            path_tgt: data/dev/raw/newsdev2020-jaen-ref.en.sgm
+            transforms: [filtertoolong, sentencepiece]
+
+save_model: models/transformer_base
+src_subword_type: sentencepiece
+tgt_subword_type: sentencepiece
+src_subword_model: sentencepiece/transformer_base.ja.model 
+tgt_subword_model: sentencepiece/transformer_base.en.model 
+
+# filter long sentences
+src_seq_length: 100
+tgt_seq_length: 100
+
+# General opts
+save_checkpoint_steps: 10000
+valid_steps: 10000
+train_steps: 100000
+report_every: 100
+#train_steps: 200000 # This is different from the number used in the orig. paper (100K train_steps used in the paper)
+
+# Batching
+queue_size: 10000
+bucket_size: 32768
+world_size: 1
+gpu_ranks: [0]
+batch_type: "tokens"
+batch_size: 4096
+valid_batch_size: 8
+max_generator_batches: 2
+accum_count: [4]
+accum_steps: [0]
+
+# Optimization
+model_dtype: "fp32"
+optim: "adam"
+learning_rate: 2
+warmup_steps: 8000
+decay_method: "noam"
+adam_beta2: 0.998
+max_grad_norm: 0
+label_smoothing: 0.1
+param_init: 0
+param_init_glorot: true
+normalization: "tokens"
+
+# Model
+encoder_type: transformer
+decoder_type: transformer
+position_encoding: true
+enc_layers: 6
+dec_layers: 6
+heads: 8
+rnn_size: 512
+word_vec_size: 512
+transformer_ff: 2048
+dropout_steps: [0]
+dropout: [0.1]
+attention_dropout: [0.1]
+early_stopping: 100 # newly added

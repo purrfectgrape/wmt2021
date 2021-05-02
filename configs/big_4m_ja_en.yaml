@@ -1,0 +1,75 @@
+# config for training 4M
+seed: 1111
+save_data: /nas/models/experiment/ja-en/wmt2021/models/big_4m
+
+src_vocab: /nas/models/experiment/ja-en/wmt2021/models/big_4m.vocab.src
+tgt_vocab: /nas/models/experiment/ja-en/wmt2021/models/big_4m.vocab.tgt
+overwrite: False
+data: 
+      corpus:
+            path_src: /nas/models/experiment/ja-en/wmt2021/data/train/raw/sample-4m.ja
+            path_tgt: /nas/models/experiment/ja-en/wmt2021/data/train/raw/sample-4m.en
+            transforms: [sentencepiece, filtertoolong]
+      valid:
+            path_src: /nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020-jaen-src.ja.sgm
+            path_tgt: /nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020-jaen-ref.en.sgm
+            transforms: [sentencepiece, filtertoolong]
+# General settings
+skip_empty_level: silent
+
+save_model: /nas/models/experiment/ja-en/wmt2021/models/big_4m
+src_subword_model: /nas/models/experiment/ja-en/wmt2021/sentencepiece/baseline_sample_4m.ja.model 
+tgt_subword_model: /nas/models/experiment/ja-en/wmt2021/sentencepiece/baseline_sample_4m.en.model 
+src_subword_nbest: 1
+src_subword_alpha: 0.0
+tgt_subword_nbest: 1
+tgt_subword_alpha: 0.0
+
+##filter long sentences
+src_seq_length: 100
+tgt_seq_length: 100
+
+# General opts
+save_checkpoint_steps: 10000
+valid_steps: 30000
+train_steps: 300000
+report_every: 100
+#
+# Batching
+queue_size: 10000
+world_size: 1
+gpu_ranks: [0]
+batch_type: "tokens"
+batch_size: 4096
+valid_batch_size: 8
+max_generator_batches: 2
+accum_count: [4]
+accum_steps: [0]
+
+# Optimization
+model_dtype: "fp32"
+optim: "adam"
+learning_rate: 2
+warmup_steps: 8000
+decay_method: "noam"
+adam_beta2: 0.998
+max_grad_norm: 0
+label_smoothing: 0.1
+param_init: 0
+param_init_glorot: true
+normalization: "tokens"
+
+# Model
+encoder_type: transformer
+decoder_type: transformer
+position_encoding: true
+enc_layers: 6
+dec_layers: 6
+heads: 16
+rnn_size: 1024
+word_vec_size: 1024
+transformer_ff: 4096
+dropout_steps: [0]
+dropout: [0.3]
+attention_dropout: [0.1]
+early_stopping: 5 # newly added#

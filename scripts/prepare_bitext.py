@@ -11,4 +11,3 @@ with open('data/alignment/fast_align_sample.en') as file_en:
                 out.write(line_en.strip() + ' ||| ' + line_ja.strip())
                 nl+=1
 print('Done!')
-
