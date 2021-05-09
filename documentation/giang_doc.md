@@ -1,3 +1,11 @@
+# Steps for tagging experiments
+## Polite tag only
+gianghl2@qivalluk://nas/models/experiment/ja-en/wmt2021$ cp /nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020-enja-ref.ja.sgm  /nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020-enja.ja
+gianghl2@qivalluk://nas/models/experiment/ja-en/wmt2021$ cp /nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020-enja-src.en.sgm /nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020-enja.en
+python scripts/pofo_tagger_simple.py --corpus=/nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020-enja --nb_sents=1998
+python scripts/pofo_tagger_simple.py --corpus=/nas/models/experiment/ja-en/wmt2021/data/sentence_filtered/mid_corpus
+scripts/train.sh configs/config_mid_en_ja_polite.yaml 0
+
 # Steps for transformer big setting on 4m ja>en data. Set the GPU number by adding a number at the end of the command.
 scripts/train.sh configs/big_4m_ja_en.yaml 0
 
@@ -32,8 +40,9 @@ python3 scripts/prepare_bitext.py
 cd libraries/fast_align/build
 cmake ..
 make
-./fast_align  -i //nas/models/experiment/ja-en/wmt2021/fast_align_sample.bitext -d -o -v > data/alignment/forward.enja.align
-./fast_align -i //nas/models/experiment/ja-en/wmt2021/fast_align_sample.bitext -d -o -v -r  > data/alignment/reverse.jaen.align
+
+./fast_align  -i //nas/models/experiment/ja-en/wmt2021/data/alignment/fast_align_sample.bitext -d -o -v > //nas/models/experiment/ja-en/wmt2021/data/alignment/forward.enja.align
+./fast_align  -i //nas/models/experiment/ja-en/wmt2021/data/alignment/fast_align_sample.bitext -d -o -v -r > //nas/models/experiment/ja-en/wmt2021/data/alignment/reverse.jaen.align
 
 ## Tokenize using sentencepiece
 spm_encode --model=sentencepiece/baseline_sample_4m.en.model --output_format=piece < data/train/raw/sample-4m.en > //nas/models/experiment/ja-en/wmt2021/data/alignment/sample-4m.en.sp
