@@ -2,8 +2,12 @@
 ## Polite tag only
 gianghl2@qivalluk://nas/models/experiment/ja-en/wmt2021$ cp /nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020-enja-ref.ja.sgm  /nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020-enja.ja
 gianghl2@qivalluk://nas/models/experiment/ja-en/wmt2021$ cp /nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020-enja-src.en.sgm /nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020-enja.en
+gianghl2@qivalluk://nas/models/experiment/ja-en/wmt2021$  cp /nas/models/experiment/ja-en/wmt2021/data/test/raw/newstest2020-enja-ref.ja.sgm /nas/models/experiment/ja-en/wmt2021/data/test/raw/newstest2020-enja.ja
+gianghl2@qivalluk://nas/models/experiment/ja-en/wmt2021$ cp /nas/models/experiment/ja-en/wmt2021/data/test/raw/newstest2020-enja-src.en.sgm /nas/models/experiment/ja-en/wmt2021/data/test/raw/newstest2020-enja.en
 python scripts/pofo_tagger_simple.py --corpus=/nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020-enja --nb_sents=1998
 python scripts/pofo_tagger_simple.py --corpus=/nas/models/experiment/ja-en/wmt2021/data/sentence_filtered/mid_corpus
+python scripts/pofo_tagger_simple.py --corpus=/nas/models/experiment/ja-en/wmt2021/data/test/raw/newstest2020-enja
+
 scripts/train.sh configs/config_mid_en_ja_polite.yaml 0
 
 # Steps for transformer big setting on 4m ja>en data. Set the GPU number by adding a number at the end of the command.
