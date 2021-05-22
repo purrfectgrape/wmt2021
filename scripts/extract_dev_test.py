@@ -26,6 +26,8 @@ parser.add_argument('--out_dir', type=str, required=True,
     help='directory of the cleaned data')
 parser.add_argument('--type', type=str, required=True,
     help='dev or test')
+parser.add_argument('--encoding', default='utf-8',
+    help='character encoding for input/output')
 args = parser.parse_args()
 
 print('Tool to extract text from the WMT2020 dev and test set.')
@@ -33,22 +35,22 @@ print('Tool to extract text from the WMT2020 dev and test set.')
 if __name__ == "__main__":
     sents_list = []
     if args.src:
-        with open(os.path.join(args.input_dir, 'news' + args.type + '2020-' + args.direction + '-src.' + ''.join(list(args.direction)[:2]) + '.sgm')) as infile:
+        with open(os.path.join(args.input_dir, 'news' + args.type + '2020-' + args.direction + '-src.' + ''.join(list(args.direction)[:2]) + '.sgm'), encoding=args.encoding) as infile:
             soup = BeautifulSoup(infile.read())
             seg = soup.find_all('seg')
             for sent in seg:
                 sents_list.append(sent.text)
-        with open(os.path.join(args.out_dir, 'news' + args.type + '2020-' + args.direction + '-src.' + ''.join(list(args.direction)[:2]) + '.sgm'), 'wt') as outfile:
+        with open(os.path.join(args.out_dir, 'news' + args.type + '2020-' + args.direction + '-src.' + ''.join(list(args.direction)[:2]) + '.sgm'), 'wt', encoding=args.encoding) as outfile:
             for sent in sents_list:
                 outfile.write(sent + '\n')
         print('Done. Check the data in ' + args.out_dir)
     elif args.tgt:
-        with open(os.path.join(args.input_dir, 'news' + args.type + '2020-' + args.direction + '-ref.' + ''.join(list(args.direction)[2:]) + '.sgm')) as infile:
+        with open(os.path.join(args.input_dir, 'news' + args.type + '2020-' + args.direction + '-ref.' + ''.join(list(args.direction)[2:]) + '.sgm'), encoding=args.encoding) as infile:
             soup = BeautifulSoup(infile.read())
             seg = soup.find_all('seg')
             for sent in seg:
                 sents_list.append(sent.text)
-        with open(os.path.join(args.out_dir, 'news' + args.type + '2020-' + args.direction + '-ref.' + ''.join(list(args.direction)[2:]) + '.sgm'), 'wt') as outfile:
+        with open(os.path.join(args.out_dir, 'news' + args.type + '2020-' + args.direction + '-ref.' + ''.join(list(args.direction)[2:]) + '.sgm'), 'wt', encoding=args.encoding) as outfile:
             for sent in sents_list:
                 outfile.write(sent + '\n')
         print('Done. Check the data in ' + args.out_dir)

@@ -20,6 +20,8 @@ parser.add_argument('--jaen', type=str, required=True,
     help='zipped file of ja-en bitext')
 parser.add_argument('--out_dir', type=str, required=True,
     help='directory of the unzipped data')
+parser.add_argument('--encoding', default='utf-8',
+    help='character encoding for input/output')
 args = parser.parse_args()
 
 print('Tool to extract bitext from Ted Talks')
@@ -41,7 +43,7 @@ def create_docs_list(directory, lang):
     return docs_list
 
 def write_lines(directory, docs, lang):
-    with open(directory + '/ted.' + lang, 'wt') as outfile:
+    with open(directory + '/ted.' + lang, 'wt', encoding=args.encoding) as outfile:
         for doc in docs:
             for sent in doc:
                 if sent != '\n':

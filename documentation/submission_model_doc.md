@@ -55,8 +55,9 @@ The amount of training data after filtering should be 12.7M
 
 ## Get rid of extra whitespaces
 awk '{$1=$1;print}' data/train/raw/wmt2021-bitext-langid-filtered.en > data/train/raw/wmt2021-bitext-langid-filtered-cln.en  <br>
-awk '{$1=$1;print}' data/train/raw/wmt2021-bitext-langid-filtered.ja > data/train/raw/wmt2021-bitext-langid-filtered-cln.ja <br>
-
+awk '{$1=$1;print}' data/train/raw/wmt2021-bitext-langid-filtered.ja > data/train/raw/wmt2021-bitext-langid-filtered-1.ja <br>
+cat data/train/raw/wmt2021-bitext-langid-filtered-1.ja | libraries/moses/scripts/tokenizer/remove-non-printing-char.perl -l ja > $BASE/data/train/preprocessed/data/train/raw/wmt2021-bitext-langid-filtered-cln.ja <br>
+rm data/train/raw/wmt2021-bitext-langid-filtered-1.ja
 
 ## Preprocess English (punc and non-printing char norm)
 scripts/preprocess_en.sh -c wmt2021-bitext
@@ -76,22 +77,7 @@ spm_train --input=data/train/preprocessed/wmt2021-bitext.en --train_extremely_la
 spm_train --input=data/train/preprocessed/wmt2021-bitext.ja --train_extremely_large_corpus=true --vocab_size=32000 --character_coverage=0.9995 --input_sentence_size=7000000 --shuffle_input_sentence=true --model_prefix=sentencepiece/transformer_big.ja <br>
 <br>
 
-## Create file for fast_align from sentencepiece models
-spm_encode --model=sentencepiece/transformer_big.en.model --output_format=piece < data/train/preprocessed/wmt2021-bitext.en | sed 's/▁//g' > data/alignment/fast_align.en <br>
-<br>
-spm_encode --model=sentencepiece/transformer_big.ja.model --output_format=piece < data/train/preprocessed/wmt2021-bitext.ja | sed 's/▁//g' > data/alignment/fast_align.ja <br>
-<br>
-python3 scripts/prepare_align_bitext.py <br>
-<br>
 
 ## Apply politeness and formality tags
 python scripts/pofo_tagger_simple.py --corpus=data/train/preprocessed/wmt2021-bitext
 
-## Run fast_align
-cd libraries/fast_align/build <br>
-cmake .. <br>
-make <br>
-
-./fast_align -i //nas/models/experiment/ja-en/wmt2021/data/alignment/fast_align.bitext -d -o -v > //nas/models/experiment/ja-en/wmt2021/data/alignment/enja.align  <br>
-./fast_align -i //nas/models/experiment/ja-en/wmt2021/data/alignment/fast_align.bitext -d -o -v -r > //nas/models/experiment/ja-en/wmt2021/data/alignment/jaen.align
-<br>
