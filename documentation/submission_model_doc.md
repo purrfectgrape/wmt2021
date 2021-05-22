@@ -56,7 +56,7 @@ The amount of training data after filtering should be 12.7M
 ## Get rid of extra whitespaces
 awk '{$1=$1;print}' data/train/raw/wmt2021-bitext-langid-filtered.en > data/train/raw/wmt2021-bitext-langid-filtered-cln.en  <br>
 awk '{$1=$1;print}' data/train/raw/wmt2021-bitext-langid-filtered.ja > data/train/raw/wmt2021-bitext-langid-filtered-1.ja <br>
-cat data/train/raw/wmt2021-bitext-langid-filtered-1.ja | libraries/moses/scripts/tokenizer/remove-non-printing-char.perl -l ja > $BASE/data/train/preprocessed/data/train/raw/wmt2021-bitext-langid-filtered-cln.ja <br>
+cat data/train/raw/wmt2021-bitext-langid-filtered-1.ja | libraries/moses/scripts/tokenizer/remove-non-printing-char.perl -l ja > data/train/raw/wmt2021-bitext-langid-filtered-cln.ja <br>
 rm data/train/raw/wmt2021-bitext-langid-filtered-1.ja
 
 ## Preprocess English (punc and non-printing char norm)
@@ -81,3 +81,8 @@ spm_train --input=data/train/preprocessed/wmt2021-bitext.ja --train_extremely_la
 ## Apply politeness and formality tags
 python scripts/pofo_tagger_simple.py --corpus=data/train/preprocessed/wmt2021-bitext
 
+## Preprocess development data
+scripts/preprocess_dev.sh 
+
+## Train ja->en BIG model on 4 GPUs.
+scripts/train.sh configs/transformer_big_ja_en.yaml 0,1,2,3
