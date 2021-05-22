@@ -31,6 +31,14 @@ spm_encode --model=$BASE/sentencepiece/baseline_sample_4m.ja.model \
     < $BASE/data/test/raw/newstest2020-jaen-src.ja.sgm \
     > $BASE/data/test/preprocessed/newstest2020-jaen-baseline.sp.ja
 
+spm_encode --model=$BASE/sentencepiece/baseline_sample_4m.en.model \
+	 < $BASE/data/test/raw/newstest2020-enja-src.en.sgm \
+	 > $BASE/data/test/preprocessed/newstest2020-enja-baseline.sp.en
+
+spm_encode --model=$BASE/sentencepiece/baseline_sample_4m.ja.model \
+    < $BASE/data/test/raw/newstest2020-enja-ref.ja.sgm \
+    > $BASE/data/test/preprocessed/newstest2020-enja-baseline.sp.ja
+
 echo "line counts"
 wc -l $BASE/data/test/preprocessed/newstest2020-jaen-hiragana.sp.en
 wc -l $BASE/data/test/preprocessed/newstest2020-jaen-romaji.sp.en

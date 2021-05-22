@@ -101,6 +101,10 @@ python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/test/sgm --directio
 
 ## Concatenate raw corpora for train
 ./scripts/concatenate_bitext.sh -c train/raw
+You should see this:
+Concatenate all bitext corpora...
+Total sents count for bitext data in Japanese: 13957762 ./scripts/../data/train/raw/wmt2021-bitext.ja
+Total sents count for bitext data in English: 13957762 ./scripts/../data/train/raw/wmt2021-bitext.en
 
 ## Get fast-text pre-trained model
 wget -O /tmp/lid.176.bin https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin
