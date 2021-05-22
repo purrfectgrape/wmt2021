@@ -1,0 +1,77 @@
+# config for training 4M
+
+save_data: /nas/models/experiment/ja-en/wmt2021/models/baseline_4m
+
+src_vocab: /nas/models/experiment/ja-en/wmt2021/models/baseline_4m.vocab.tgt
+tgt_vocab: /nas/models/experiment/ja-en/wmt2021/models/baseline_4m.vocab.src
+overwrite: False
+data: 
+      corpus_1:
+            path_src: /nas/models/experiment/ja-en/wmt2021/data/train/raw/sample-4m.en
+            path_tgt: /nas/models/experiment/ja-en/wmt2021/data/train/raw/sample-4m.ja
+            transforms: [sentencepiece, filtertoolong]
+      valid:
+            path_src: /nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020-enja-src.en.sgm
+            path_tgt: /nas/models/experiment/ja-en/wmt2021/data/dev/raw/newsdev2020-enja-ref.ja.sgm
+            transforms: [sentencepiece, filtertoolong]
+# General settings
+skip_empty_level: silent
+
+save_model: /nas/models/experiment/ja-en/wmt2021/models/baseline_4m_en_ja
+src_subword_model: /nas/models/experiment/ja-en/wmt2021/sentencepiece/baseline_sample_4m.en.model 
+tgt_subword_model: /nas/models/experiment/ja-en/wmt2021/sentencepiece/baseline_sample_4m.ja.model 
+src_subword_nbest: 1
+src_subword_alpha: 0.0
+tgt_subword_nbest: 1
+tgt_subword_alpha: 0.0
+
+##filter long sentences
+src_seq_length: 100
+tgt_seq_length: 100
+
+save_checkpoint_steps: 1000
+keep_checkpoint: 20
+seed: 1234
+train_steps: 20000
+valid_steps: 1000
+warmup_steps: 800
+report_every: 100
+
+# Batching
+queue_size: 10000
+world_size: 1
+gpu_ranks: [0]
+batch_type: "tokens"
+batch_size: 4096
+valid_batch_size: 8
+max_generator_batches: 2
+accum_count: [4]
+accum_steps: [0]
+
+# Optimization
+model_dtype: "fp32"
+optim: "adam"
+learning_rate: 2
+warmup_steps: 8000
+decay_method: "noam"
+adam_beta2: 0.998
+max_grad_norm: 0
+label_smoothing: 0.1
+param_init: 0
+param_init_glorot: true
+normalization: "tokens"
+
+# Model
+encoder_type: transformer
+decoder_type: transformer
+position_encoding: true
+enc_layers: 6
+dec_layers: 6
+heads: 8
+rnn_size: 512
+word_vec_size: 512
+transformer_ff: 2048
+dropout_steps: [0]
+dropout: [0.1]
+attention_dropout: [0.1]
+#
