@@ -1,4 +1,4 @@
-# Config for transformer_big ja->en.
+# Config for transformer_big ja->en with alignment.
 seed: 1111
 # Data
 save_data: models/transformer_big/ja-en
@@ -7,13 +7,18 @@ tgt_vocab: models/transformer_big/ja-en.vocab.tgt
 overwrite: False
 data:
       corpus_big:
-            path_src: /nas/models/experiment/ja-en/wmt2021/data/train/preprocessed/wmt2021-bitext.ja
-            path_tgt: /nas/models/experiment/ja-en/wmt2021/data/train/preprocessed/wmt2021-bitext.en
+            path_src: /nas/models/experiment/ja-en/wmt2021/data/alignment/fast_align.ja.sp
+            path_tgt: /nas/models/experiment/ja-en/wmt2021/data/alignment/fast_align.en.sp
             transforms: [filtertoolong]
+            weight: 1
+            path_align: /nas/models/experiment/ja-en/wmt2021/data/alignment/jaen.align
       valid:
-            path_src:  /nas/models/experiment/ja-en/wmt2021/data/dev/preprocessed/newsdev2020-jaen-src.ja
-            path_tgt:  /nas/models/experiment/ja-en/wmt2021/data/dev/preprocessed/newsdev2020-jaen-ref.en
+            path_src: /nas/models/experiment/ja-en/wmt2021/data/alignment/dev.ja.sp
+            path_tgt: /nas/models/experiment/ja-en/wmt2021/data/alignment/dev.en.sp
             transforms: [filtertoolong]
+            weight: 1
+            path_align:
+
 # General settings
 skip_empty_level: silent
 save_model: /nas/models/experiment/ja-en/wmt2021/models/transformer_big/ja-en/

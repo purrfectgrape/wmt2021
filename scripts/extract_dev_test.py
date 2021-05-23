@@ -40,7 +40,7 @@ if __name__ == "__main__":
             seg = soup.find_all('seg')
             for sent in seg:
                 sents_list.append(sent.text)
-        with open(os.path.join(args.out_dir, 'news' + args.type + '2020-' + args.direction + '-src.' + ''.join(list(args.direction)[:2]) + '.sgm'), 'wt', encoding=args.encoding) as outfile:
+        with open(os.path.join(args.out_dir, 'news' + args.type + '2020-' + args.direction + '.' + ''.join(list(args.direction)[:2]) + '.sgm'), 'wt', encoding=args.encoding) as outfile:
             for sent in sents_list:
                 outfile.write(sent + '\n')
         print('Done. Check the data in ' + args.out_dir)
@@ -50,7 +50,7 @@ if __name__ == "__main__":
             seg = soup.find_all('seg')
             for sent in seg:
                 sents_list.append(sent.text)
-        with open(os.path.join(args.out_dir, 'news' + args.type + '2020-' + args.direction + '-ref.' + ''.join(list(args.direction)[2:]) + '.sgm'), 'wt', encoding=args.encoding) as outfile:
+        with open(os.path.join(args.out_dir, 'news' + args.type + '2020-' + args.direction + '.' + ''.join(list(args.direction)[2:]) + '.sgm'), 'wt', encoding=args.encoding) as outfile:
             for sent in sents_list:
                 outfile.write(sent + '\n')
         print('Done. Check the data in ' + args.out_dir)

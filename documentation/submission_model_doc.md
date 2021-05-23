@@ -71,18 +71,37 @@ diff -y --color testfile.ja out.ja --suppress-common-lines -W 150 --color=auto |
 Note that for JA>EN, we only remove the English in parentheses. We don't normalize katakana. <br>
 python3 scripts/preprocess_ja.py --input=/nas/models/experiment/ja-en/wmt2021/data/train/raw/wmt2021-bitext-langid-filtered-cln.ja --output=/nas/models/experiment/ja-en/wmt2021/data/train/preprocessed/wmt2021-bitext.ja
 
+## Shuffle the training corpus
+paste -d '\t' /nas/models/experiment/ja-en/wmt2021/data/train/preprocessed/wmt2021-bitext.ja /nas/models/experiment/ja-en/wmt2021/data/train/preprocessed/wmt2021-bitext.en | shuf | awk -v FS='\t' '{ print $1 > "/nas/models/experiment/ja-en/wmt2021/data/train/preprocessed/wmt2021-bitext-shuffled.ja" ; print $2 > "/nas/models/experiment/ja-en/wmt2021/data/train/preprocessed/wmt2021-bitext-shuffled.en" }'
+
 ## Train sentencepiece
 spm_train --input=data/train/preprocessed/wmt2021-bitext.en --train_extremely_large_corpus=true --vocab_size=32000 --character_coverage=1 --input_sentence_size=7000000 --shuffle_input_sentence=true --model_prefix=sentencepiece/transformer_big.en <br>
 <br>
 spm_train --input=data/train/preprocessed/wmt2021-bitext.ja --train_extremely_large_corpus=true --vocab_size=32000 --character_coverage=0.9995 --input_sentence_size=7000000 --shuffle_input_sentence=true --model_prefix=sentencepiece/transformer_big.ja <br>
 <br>
 
-
 ## Apply politeness and formality tags
 python scripts/pofo_tagger_simple.py --corpus=data/train/preprocessed/wmt2021-bitext
 
 ## Preprocess development data
-scripts/preprocess_dev.sh 
+scripts/preprocess_dev.sh jaen 
 
 ## Train ja->en BIG model on 4 GPUs.
 scripts/train.sh configs/transformer_big_ja_en.yaml 0,1,2,3
+
+## Visualize the learning curve
+ssh -L 16006:127.0.0.1:6006 gianghl2@qivalluk.linguistics.illinois.edu <br>
+tensorboard --logdir=logs/ <br>
+http://127.0.0.1:16006/
+
+## Annotate named entities in English and Japanese
+
+
+## Create file for fast_align from sentencepiece models
+spm_encode --model=sentencepiece/transformer_big.en.model --output_format=piece < data/train/preprocessed/wmt2021-bitext.en > data/alignment/fast_align.en.sp
+spm_encode --model=sentencepiece/transformer_big.ja.model --output_format=piece < data/train/preprocessed/wmt2021-bitext.ja > data/alignment/fast_align.ja.sp
+python3 scripts/prepare_align_bitext.py
+
+## Learn alignments with fastalign
+./fast_align -i //nas/models/experiment/ja-en/wmt2021/data/alignment/fast_align.bitext.sp -d -o -v > //nas/models/experiment/ja-en/wmt2021/data/alignment/enja.align 
+./fast_align -i //nas/models/experiment/ja-en/wmt2021/data/alignment/fast_align.bitext.sp -d -o -v -r > //nas/models/experiment/ja-en/wmt2021/data/alignment/jaen.align

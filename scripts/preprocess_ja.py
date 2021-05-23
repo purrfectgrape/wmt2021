@@ -41,7 +41,11 @@ def normalize_katakana(line):
 with open(args.output, 'w') as output:
     with open(args.input) as input:
         for line in input.readlines():
-            output.write(remove_parens(line.strip()) + '\n')
+            if remove_parens(line.strip()) != '':
+                output.write(remove_parens(line.strip()) + '\n')
+            # To prevent empty lines, always write something.
+            else:
+                output.write(line.strip() + '\n')
 
 print('Done normalizing Japanese!')
 
