@@ -30,15 +30,25 @@ python3 scripts/extract_titles_newscom.py --txt=data/wmt2021/news-commentary/new
 python3 scripts/extract_titles_newscom.py --txt=data/wmt2021/wikititles/wikititles-v3.ja-en.tsv --bitext=data/train/raw/wikititles<br>
 <br>
 ### Dev data
+#### ja>en direction
 python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/dev/dev --direction=jaen --out_dir=data/dev/raw --tgt --type=dev<br>
 <br>
 python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/dev/dev --direction=jaen --out_dir=data/dev/raw --src  --type=dev<br>
 <br>
+#### en>ja direction
+python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/dev/dev --direction=enja --out_dir=data/dev/raw --src --type=dev<br>
+python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/dev/dev --direction=enja --out_dir=data/dev/raw --tgt --type=dev<br>
+
 ### Test data
+#### ja>en direction
 python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/test/sgm --direction=jaen --out_dir=data/test/raw --tgt --type=test<br>
 <br>
 python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/test/sgm --direction=jaen --out_dir=data/test/raw --src --type=test<br>
 <br>
+#### en>ja direction
+python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/test/sgm --direction=enja --out_dir=data/test/raw --src --type=test<br>
+python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/test/sgm --direction=enja --out_dir=data/test/raw --tgt --type=test <br>
+
 ## Sanity check
 ./scripts/get_corpus_stats.sh -c train/raw<br>
 <br>
@@ -90,9 +100,13 @@ scripts/preprocess_dev.sh jaen
 scripts/train.sh configs/transformer_big_ja_en.yaml 0,1,2,3
 
 ## Visualize the learning curve
+Add these lines to the yaml
+tensorboard: true <br>
+tensorboard_log_dir: /nas/models/experiment/ja-en/wmt2021/logs <br>
+Also log into the server like this
 ssh -L 16006:127.0.0.1:6006 gianghl2@qivalluk.linguistics.illinois.edu <br>
 tensorboard --logdir=logs/ <br>
-http://127.0.0.1:16006/
+http://127.0.0.1:16006/ <br>
 
 ## Annotate named entities in English and Japanese
 
@@ -103,5 +117,6 @@ spm_encode --model=sentencepiece/transformer_big.ja.model --output_format=piece 
 python3 scripts/prepare_align_bitext.py
 
 ## Learn alignments with fastalign
+cd libraries/fast_align/build && cmake .. && make
 ./fast_align -i //nas/models/experiment/ja-en/wmt2021/data/alignment/fast_align.bitext.sp -d -o -v > //nas/models/experiment/ja-en/wmt2021/data/alignment/enja.align 
 ./fast_align -i //nas/models/experiment/ja-en/wmt2021/data/alignment/fast_align.bitext.sp -d -o -v -r > //nas/models/experiment/ja-en/wmt2021/data/alignment/jaen.align
