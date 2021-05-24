@@ -112,11 +112,16 @@ http://127.0.0.1:16006/ <br>
 
 
 ## Create file for fast_align from sentencepiece models
-spm_encode --model=sentencepiece/transformer_big.en.model --output_format=piece < data/train/preprocessed/wmt2021-bitext.en > data/alignment/fast_align.en.sp
-spm_encode --model=sentencepiece/transformer_big.ja.model --output_format=piece < data/train/preprocessed/wmt2021-bitext.ja > data/alignment/fast_align.ja.sp
+spm_encode --model=sentencepiece/transformer_big.en.model --output_format=piece < data/train/preprocessed/wmt2021-bitext-shuffled.en > data/alignment/fast_align.en.sp
+spm_encode --model=sentencepiece/transformer_big.ja.model --output_format=piece < data/train/preprocessed/wmt2021-bitext-shuffled.ja > data/alignment/fast_align.ja.sp
+spm_encode --model=sentencepiece/transformer_big.ja.model  --output_format=piece < data/dev/preprocessed/newsdev2020-jaen.ja > data/alignment/dev.ja.sp
+spm_encode --model=sentencepiece/transformer_big.en.model  --output_format=piece < data/dev/preprocessed/newsdev2020-jaen.en > data/alignment/dev.en.sp 
 python3 scripts/prepare_align_bitext.py
 
 ## Learn alignments with fastalign
 cd libraries/fast_align/build && cmake .. && make
 ./fast_align -i //nas/models/experiment/ja-en/wmt2021/data/alignment/fast_align.bitext.sp -d -o -v > //nas/models/experiment/ja-en/wmt2021/data/alignment/enja.align 
 ./fast_align -i //nas/models/experiment/ja-en/wmt2021/data/alignment/fast_align.bitext.sp -d -o -v -r > //nas/models/experiment/ja-en/wmt2021/data/alignment/jaen.align
+
+## Train model with alignment
+scripts/train.sh configs/transformer_big_align_ja_en.yaml 4
