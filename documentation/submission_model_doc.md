@@ -9,11 +9,6 @@ cd //nas/models/experiment/ja-en/wmt2021
 
 ## Extract sentences from each corpus
 
-### Download ted talks processing tools
-gdown --id 1-wmonUKD3WBy8va8_88O9UcSSw2Wy4zj <br>
-unzip tools_2012.zip -d libraries/ted_tools <br>
-rm tools_2012.zip <br>
-
 ### Training data
 python3 scripts/extract_wikimatrix.py --threshold=1.0 --src-lang=en --trg-lang=ja --tsv=data/wmt2021/wikimatrix/WikiMatrix.v1.en-ja.langid.tsv --bitext=data/train/raw/wikimatrix<br>
 <br>
@@ -95,6 +90,11 @@ python scripts/pofo_tagger_simple.py --corpus=data/train/preprocessed/wmt2021-bi
 
 ## Preprocess development data
 scripts/preprocess_dev.sh jaen 
+scripts/preprocess_dev.sh enja
+
+## Preprocess test data
+scripts/preprocess_test.sh jaen
+scripts/preprocess_test.sh enja
 
 ## Train ja->en BIG model on 4 GPUs.
 scripts/train.sh configs/transformer_big_ja_en.yaml 0,1,2,3
@@ -108,8 +108,16 @@ ssh -L 16006:127.0.0.1:6006 gianghl2@qivalluk.linguistics.illinois.edu <br>
 tensorboard --logdir=logs/ <br>
 http://127.0.0.1:16006/ <br>
 
-## Annotate named entities in English and Japanese
+## Annotate named entities in English 12.7M
+python3 scripts/ner_annotator_en.py --input=data/train/preprocessed/wmt2021-bitext-shuffled.en --output=data/train/preprocessed/wmt2021-bitext-shuffled-annotated.en --nb-sents=12718322 <br>
 
+## Annotate named entities for a smaller English data set
+python3 scripts/ner_annotator_en.py --input=/nas/models/experiment/ja-en/wmt2021/data/train/raw/sample-4m.en  --output=/nas/models/experiment/ja-en/wmt2021/data/train/raw/sample-4m-annotated.en --nb-sents=4000000
+
+Fix issues with the annotator:
+cat data/train/raw/sample-4m-annotated.en | sed 's/\(^.*｟[^｠]*\)$/\1｠/g' > checkfix
+diff -y data/train/raw/sample-4m-annotated.en checkfix --suppress-common-lines | wc -l (should return the same number of lines as in data/train/raw/sample-4m.en.errors)
+mv checkfix data/train/raw/sample-4m-annotated.en
 
 ## Create file for fast_align from sentencepiece models
 spm_encode --model=sentencepiece/transformer_big.en.model --output_format=piece < data/train/preprocessed/wmt2021-bitext-shuffled.en > data/alignment/fast_align.en.sp
@@ -125,3 +133,17 @@ cd libraries/fast_align/build && cmake .. && make
 
 ## Train model with alignment
 scripts/train.sh configs/transformer_big_align_ja_en.yaml 4
+
+## (Experiment) Train a small model (4m) with annotated NE in English to translate en->ja and translate
+scripts/train.sh configs/alignment_4m_en_ja_ner.yaml 7
+scripts/eval_alignment_4m_en_ja_ner.sh (remember to include --report_align in calling translate.py)
+Check cat translate/alignment_4m_en_ja_ner/test.ja.hyp_alignment_4m_en_ja_ner_step_6000.sp for the alignment
+
+## Preprocess test files
+spm_encode --model=sentencepiece/transformer_big.ja.model  --output_format=piece < data/test/preprocessed/newstest2020-jaen.ja > data/test/preprocessed/newstest2020-jaen.ja.sp
+spm_encode --model=sentencepiece/transformer_big.en.model  --output_format=piece < data/test/preprocessed/newstest2020-jaen.en > data/test/preprocessed/newstest2020-jaen.en.sp
+
+## Translate and evaluation
+scripts/eval_transformer_big.sh dev
+scripts/eval_transformer_big.sh test
+

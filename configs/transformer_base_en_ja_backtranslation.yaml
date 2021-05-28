@@ -1,7 +1,7 @@
 # This config is copied from https://opennmt.net/OpenNMT-py/FAQ.html#how-do-i-use-the-transformer-model
 seed: 1111
 # Data
-save_data: models/transformer_base
+save_data: models/transformer_base_backtrans
 src_vocab: models/transformer_base.vocab.tgt
 tgt_vocab: models/transformer_base.vocab.src
 overwrite: True
@@ -41,11 +41,11 @@ report_every: 100
 # Batching
 queue_size: 10000
 bucket_size: 32768
-world_size: 3
-gpu_ranks: [0, 1, 2]
+world_size: 4
+gpu_ranks: [0,5,6,7]
 batch_type: "tokens"
-batch_size: 4096
-valid_batch_size: 8
+batch_size: 4094
+valid_batch_size: 4
 max_generator_batches: 2
 accum_count: [4]
 accum_steps: [0]
@@ -77,3 +77,6 @@ dropout_steps: [0]
 dropout: [0.1]
 attention_dropout: [0.1]
 early_stopping: 5 # newly added
+
+log_file: log
+log_file_level: WARNING

@@ -30,16 +30,22 @@ with open(args.input, 'rt', encoding=args.encoding) as file_in:
             doc = nlp(file_in.readline())
             i = 0
             str_list = []
-            while i < len(doc.text):
-                for value in annotate_ner(doc).values():
-                    if i == value[0]:
-                        str_list.append('『'+doc.text[i:value[1]]+'』_'+value[2])
-                        i+=int(value[1])-int(value[0])
-                        continue
-                str_list.append(doc.text[i])
-                i+=1
-            file_out.write(''.join(str_list))
-            nl+=1
+            try:
+                while i < len(doc.text):
+                    for value in annotate_ner(doc).values():
+                        if i == value[0]:
+                            str_list.append('｟'+value[2]+'：'+doc.text[i:value[1]]+'｠')
+                            i+=int(value[1])-int(value[0])
+                            continue
+                    str_list.append(doc.text[i])
+                    i+=1
+                file_out.write(''.join(str_list))
+                nl+=1
+            # The error below happens in extreme edge cases where the span is very short and near the end of the line. I decide to throw an error and fix these cases individually later.
+            except IndexError:
+                file_out.write(''.join(str_list))
+                with open(args.input + '.errors', 'a', encoding=args.encoding) as file_err:
+                    file_err.write('IndexError found in :' + ''.join(str_list))
 print('\r - processed {:d} lines'.format(nl))
 print("Done annotation. Check file in " + args.output)
         
