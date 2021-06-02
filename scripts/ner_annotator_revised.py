@@ -33,29 +33,32 @@ nl = 0
 with open(args.input, 'rt', encoding=args.encoding) as file_in:
     with open(args.output, 'wt', encoding=args.encoding) as file_out:
         while nl < args.nb_sents:
-            doc = nlp(file_in.readline())
-            i = 0
+            line = file_in.readline()
+            if not line:
+                break
+            doc = nlp(line)
             str_list = []
+            i = 0
             try:
                 while i < len(doc.text):
                     for value in annotate_ner(doc).values():
                         if i == value[0] and (value[2] == 'PERSON' or value[2] == 'DATE' or value[2] == 'TIME' or value[2] == 'MONEY' or value[2] == 'ORG'):
                             str_list.append('｟'+value[2]+'：'+doc.text[i:value[1]]+'｠')
                             i+=int(value[1])-int(value[0])
-                            continue
                         elif i == value[0] and (value[2] == 'LOC' or value[2] == 'GPE'):
                             str_list.append('｟'+'LOC'+'：'+doc.text[i:value[1]]+'｠')
                             i+=int(value[1])-int(value[0])
-                            continue
+                    print(i, ' ||| ', doc.text[i])
                     str_list.append(doc.text[i])
                     i+=1
+                print('STR : ' + ''.join(str_list))
                 file_out.write(''.join(str_list))
                 nl+=1
-            # The error below happens in extreme edge cases where the span is very short and near the end of the line. I decide to throw an error and fix these cases individually later.
             except IndexError:
                 file_out.write(''.join(str_list))
-                with open(args.input + '.errors', 'a', encoding=args.encoding) as file_err:
-                    file_err.write('IndexError found in :' + ''.join(str_list) + '\n')
+                nl+=1
+                with open(args.input + '.errors', 'wt', encoding=args.encoding) as file_err:
+                    file_err.write('IndexError found in line ' + str(nl) + ' >>> ' + ''.join(str_list))
 print('\r - processed {:d} lines'.format(nl))
 print("Done annotation. Check file in " + args.output)
         
