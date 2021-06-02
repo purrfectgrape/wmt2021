@@ -1,0 +1,20 @@
+./scripts/../models/transformer_base/transformer_base_step_100000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 14.4 54.4/23.5/12.3/6.9 (BP = 0.793 ratio = 0.812 hyp_len = 22885 ref_len = 28196)
+./scripts/../models/transformer_base/transformer_base_step_10000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 10.7 49.5/18.7/8.7/4.3 (BP = 0.788 ratio = 0.807 hyp_len = 22766 ref_len = 28196)
+./scripts/../models/transformer_base/transformer_base_step_20000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 12.0 51.6/21.4/10.8/5.9 (BP = 0.737 ratio = 0.766 hyp_len = 21611 ref_len = 28196)
+./scripts/../models/transformer_base/transformer_base_step_30000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 7.6 40.4/13.0/5.5/2.6 (BP = 0.816 ratio = 0.831 hyp_len = 23431 ref_len = 28196)
+./scripts/../models/transformer_base/transformer_base_step_40000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 15.0 54.8/23.9/12.6/7.1 (BP = 0.813 ratio = 0.828 hyp_len = 23360 ref_len = 28196)
+./scripts/../models/transformer_base/transformer_base_step_50000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 17.5 54.3/24.8/13.5/7.9 (BP = 0.899 ratio = 0.904 hyp_len = 25479 ref_len = 28196)
+./scripts/../models/transformer_base/transformer_base_step_60000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 11.6 55.2/24.3/13.0/7.6 (BP = 0.607 ratio = 0.667 hyp_len = 18797 ref_len = 28196)
+./scripts/../models/transformer_base/transformer_base_step_70000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 6.9 47.5/17.3/7.8/3.5 (BP = 0.568 ratio = 0.639 hyp_len = 18011 ref_len = 28196)
+./scripts/../models/transformer_base/transformer_base_step_80000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 16.6 57.5/26.7/14.7/8.6 (BP = 0.788 ratio = 0.808 hyp_len = 22782 ref_len = 28196)
+./scripts/../models/transformer_base/transformer_base_step_90000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 14.8 57.5/26.4/14.6/8.6 (BP = 0.709 ratio = 0.744 hyp_len = 20980 ref_len = 28196)

@@ -1,0 +1,20 @@
+./scripts/../models/romaji_4m/romaji_4m_step_11000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 8.7 49.4/17.6/7.9/3.8 (BP = 0.684 ratio = 0.725 hyp_len = 20432 ref_len = 28196)
+./scripts/../models/romaji_4m/romaji_4m_step_12000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 11.5 48.1/18.1/8.6/4.4 (BP = 0.859 ratio = 0.868 hyp_len = 24481 ref_len = 28196)
+./scripts/../models/romaji_4m/romaji_4m_step_13000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 11.0 49.6/18.7/8.7/4.4 (BP = 0.800 ratio = 0.818 hyp_len = 23056 ref_len = 28196)
+./scripts/../models/romaji_4m/romaji_4m_step_14000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 11.9 49.2/19.2/9.0/4.6 (BP = 0.851 ratio = 0.861 hyp_len = 24272 ref_len = 28196)
+./scripts/../models/romaji_4m/romaji_4m_step_15000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 12.8 48.3/19.0/9.1/4.7 (BP = 0.908 ratio = 0.912 hyp_len = 25708 ref_len = 28196)
+./scripts/../models/romaji_4m/romaji_4m_step_16000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 10.4 48.5/17.9/8.1/3.9 (BP = 0.810 ratio = 0.826 hyp_len = 23279 ref_len = 28196)
+./scripts/../models/romaji_4m/romaji_4m_step_17000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 8.8 45.7/16.0/7.1/3.5 (BP = 0.760 ratio = 0.784 hyp_len = 22113 ref_len = 28196)
+./scripts/../models/romaji_4m/romaji_4m_step_18000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 6.8 40.7/12.9/5.5/2.5 (BP = 0.742 ratio = 0.770 hyp_len = 21720 ref_len = 28196)
+./scripts/../models/romaji_4m/romaji_4m_step_19000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 5.2 36.7/9.9/3.8/1.7 (BP = 0.748 ratio = 0.775 hyp_len = 21849 ref_len = 28196)
+./scripts/../models/romaji_4m/romaji_4m_step_20000.pt
+BLEU+case.mixed+lang.ja-en+numrefs.1+smooth.exp+tok.13a+version.1.5.1 = 5.0 42.7/13.2/5.4/2.3 (BP = 0.546 ratio = 0.623 hyp_len = 17572 ref_len = 28196)

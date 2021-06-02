@@ -1,0 +1,20 @@
+scripts/../models/transformer_base_en_ja/transformer_base_en_ja_step_100000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.5.1 = 0.2 7.3/0.5/0.1/0.0 (BP = 0.701 ratio = 0.738 hyp_len = 24751 ref_len = 33535)
+scripts/../models/transformer_base_en_ja/transformer_base_en_ja_step_10000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.5.1 = 0.1 9.8/0.7/0.0/0.0 (BP = 0.615 ratio = 0.673 hyp_len = 22568 ref_len = 33535)
+scripts/../models/transformer_base_en_ja/transformer_base_en_ja_step_20000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.5.1 = 0.3 8.5/0.5/0.1/0.0 (BP = 0.661 ratio = 0.707 hyp_len = 23707 ref_len = 33535)
+scripts/../models/transformer_base_en_ja/transformer_base_en_ja_step_30000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.5.1 = 0.1 9.2/0.3/0.1/0.0 (BP = 0.546 ratio = 0.623 hyp_len = 20894 ref_len = 33535)
+scripts/../models/transformer_base_en_ja/transformer_base_en_ja_step_40000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.5.1 = 0.3 10.0/1.1/0.1/0.0 (BP = 0.591 ratio = 0.655 hyp_len = 21971 ref_len = 33535)
+scripts/../models/transformer_base_en_ja/transformer_base_en_ja_step_50000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.5.1 = 0.1 11.9/0.7/0.1/0.0 (BP = 0.383 ratio = 0.510 hyp_len = 17107 ref_len = 33535)
+scripts/../models/transformer_base_en_ja/transformer_base_en_ja_step_60000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.5.1 = 0.2 8.2/0.4/0.1/0.0 (BP = 0.565 ratio = 0.637 hyp_len = 21353 ref_len = 33535)
+scripts/../models/transformer_base_en_ja/transformer_base_en_ja_step_70000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.5.1 = 0.1 8.9/0.2/0.0/0.0 (BP = 0.468 ratio = 0.568 hyp_len = 19062 ref_len = 33535)
+scripts/../models/transformer_base_en_ja/transformer_base_en_ja_step_80000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.5.1 = 0.4 12.7/1.5/0.2/0.1 (BP = 0.549 ratio = 0.625 hyp_len = 20954 ref_len = 33535)
+scripts/../models/transformer_base_en_ja/transformer_base_en_ja_step_90000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.5.1 = 0.3 10.9/1.0/0.1/0.1 (BP = 0.521 ratio = 0.605 hyp_len = 20298 ref_len = 33535)

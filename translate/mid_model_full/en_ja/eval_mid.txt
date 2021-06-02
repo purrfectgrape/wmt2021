@@ -1,0 +1,36 @@
+./../models/mid_model_full/model_step_1000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.4.14 = 0.1 5.9/0.7/0.0/0.0 (BP = 1.000 ratio = 1.988 hyp_len = 66659 ref_len = 33535)
+./../models/mid_model_full/model_step_11000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.4.14 = 13.2 55.4/23.8/11.5/5.9 (BP = 0.764 ratio = 0.788 hyp_len = 26410 ref_len = 33535)
+./../models/mid_model_full/model_step_12000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.4.14 = 12.0 55.2/23.0/10.8/5.3 (BP = 0.732 ratio = 0.762 hyp_len = 25564 ref_len = 33535)
+./../models/mid_model_full/model_step_13000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.4.14 = 13.0 54.8/23.4/11.2/5.7 (BP = 0.769 ratio = 0.792 hyp_len = 26549 ref_len = 33535)
+./../models/mid_model_full/model_step_14000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.4.14 = 12.6 54.4/22.6/10.7/5.4 (BP = 0.770 ratio = 0.793 hyp_len = 26583 ref_len = 33535)
+./../models/mid_model_full/model_step_15000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.4.14 = 13.8 55.7/24.3/11.8/6.1 (BP = 0.785 ratio = 0.805 hyp_len = 26989 ref_len = 33535)
+./../models/mid_model_full/model_step_16000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.4.14 = 13.4 55.3/23.9/11.6/6.0 (BP = 0.771 ratio = 0.794 hyp_len = 26613 ref_len = 33535)
+./../models/mid_model_full/model_step_17000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.4.14 = 13.6 54.3/23.4/11.4/5.8 (BP = 0.800 ratio = 0.818 hyp_len = 27418 ref_len = 33535)
+./../models/mid_model_full/model_step_18000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.4.14 = 14.3 55.1/23.9/11.8/6.2 (BP = 0.809 ratio = 0.825 hyp_len = 27658 ref_len = 33535)
+./../models/mid_model_full/model_step_19000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.4.14 = 15.6 53.8/23.3/11.3/5.9 (BP = 0.922 ratio = 0.925 hyp_len = 31010 ref_len = 33535)
+./../models/mid_model_full/model_step_2000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.4.14 = 2.3 25.9/5.2/1.0/0.2 (BP = 1.000 ratio = 1.013 hyp_len = 33967 ref_len = 33535)
+./../models/mid_model_full/model_step_20000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.4.14 = 16.0 53.4/23.1/11.4/6.0 (BP = 0.941 ratio = 0.942 hyp_len = 31604 ref_len = 33535)
+./../models/mid_model_full/model_step_3000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.4.14 = 8.6 46.8/16.0/6.2/2.5 (BP = 0.833 ratio = 0.846 hyp_len = 28357 ref_len = 33535)
+./../models/mid_model_full/model_step_4000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.4.14 = 11.6 49.1/18.3/7.9/3.7 (BP = 0.911 ratio = 0.915 hyp_len = 30670 ref_len = 33535)
+./../models/mid_model_full/model_step_5000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.4.14 = 13.0 50.6/19.8/8.9/4.3 (BP = 0.925 ratio = 0.928 hyp_len = 31121 ref_len = 33535)
+./../models/mid_model_full/model_step_6000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.4.14 = 11.0 52.8/21.3/9.7/4.6 (BP = 0.736 ratio = 0.765 hyp_len = 25671 ref_len = 33535)
+./../models/mid_model_full/model_step_7000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.4.14 = 11.3 50.0/20.1/9.2/4.5 (BP = 0.793 ratio = 0.812 hyp_len = 27223 ref_len = 33535)
+./../models/mid_model_full/model_step_8000.pt
+BLEU+case.mixed+lang.en-ja+numrefs.1+smooth.exp+tok.ja-mecab-0.996-IPA+version.1.4.14 = 10.7 53.7/21.8/9.7/4.6 (BP = 0.707 ratio = 0.743 hyp_len = 24911 ref_len = 33535)
