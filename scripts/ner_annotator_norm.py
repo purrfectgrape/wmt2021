@@ -43,10 +43,10 @@ with open(args.input, 'rt', encoding=args.encoding) as file_in:
                 while i < len(doc.text):
                     for value in annotate_ner(doc).values():
                         if i == value[0] and (value[2] == 'PERSON' or value[2] == 'DATE' or value[2] == 'TIME' or value[2] == 'MONEY' or value[2] == 'ORG'):
-                            str_list.append('｟'+value[2]+'：'+doc.text[i:value[1]]+'｠')
+                            str_list.append('｟'+value[2]+'｠')
                             i+=int(value[1])-int(value[0])
                         elif i == value[0] and (value[2] == 'LOC' or value[2] == 'GPE'):
-                            str_list.append('｟'+'LOC'+'：'+doc.text[i:value[1]]+'｠')
+                            str_list.append('｟'+'LOC'+'｠')
                             i+=int(value[1])-int(value[0])
                     print(i, ' ||| ', doc.text[i])
                     str_list.append(doc.text[i])
@@ -57,8 +57,6 @@ with open(args.input, 'rt', encoding=args.encoding) as file_in:
             except IndexError:
                 file_out.write(''.join(str_list))
                 nl+=1
-                with open(args.input + '.errors', 'wt', encoding=args.encoding) as file_err:
-                    file_err.write('IndexError found in line ' + str(nl) + ' >>> ' + ''.join(str_list))
 print('\r - processed {:d} lines'.format(nl))
 print("Done annotation. Check file in " + args.output)
         
