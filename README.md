@@ -1,3 +1,5 @@
+# Illinois Japanese ↔ English News Translation for WMT 2021
+
 This repository contains the scripts to reproduce results described in paper [Illinois Japanese ↔ English News Translation for WMT 2021](https://aclanthology.org/2021.wmt-1.11/). If you use any of the results here, please cite
 
     @inproceedings{le-etal-2021-illinois,
@@ -17,5 +19,6 @@ This repository contains the scripts to reproduce results described in paper [Il
 
 First, make sure that you are in wmt2021/ directory. After that, follow the steps below to reproduce the results of our experiments.
 
-# Retrieve data from WMT 2021
-./scripts/get_all_wmt2021.sh
+## Retrieve data from WMT 2021
+Please note that it would take approximately 7 to 8 hours to retrieve all datasets for the Japanese-English language pair from WMT 2021.
+    ./scripts/get_all_wmt2021.sh
