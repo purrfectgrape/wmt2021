@@ -21,4 +21,9 @@ First, make sure that you are in wmt2021/ directory. After that, follow the step
 
 ## Retrieve data from WMT 2021
 Please note that it would take approximately 7 to 8 hours to retrieve all datasets for the Japanese-English language pair from WMT 2021.
+
     ./scripts/get_all_wmt2021.sh
+
+If you would like to retrieve individual datasets, do the following. Substitute the name of the corpus you are interested in with *paracrawl*
+
+    ./scripts/get_data.sh -c ted
