@@ -24,7 +24,7 @@ Please note that it would take approximately 7 to 8 hours to retrieve all datase
 
     ./scripts/get_all_wmt2021.sh
 
-If you would like to retrieve individual datasets, do the following. Substitute the name of the corpus you are interested in after the -c flag with *paracrawl*, *news-commentary*, *wikititles*, *wikimatrix*, *subtitles*, *kftt*, *ted* for the bitext corpora and *newscrawl-ja*, *news-commentary-ja*, *commoncrawl-ja*, *newscrawl-en*, *news-discussion-en*, *europarl-en*, *news-commentary-en*, *commoncrawl-en* for the monolingual corpora.
+If you would like to retrieve individual datasets, do the following. Substitute the name of the corpus you are interested in after the -c flag with *paracrawl*, *news-commentary*, *wikititles*, *wikimatrix*, *subtitles*, *kftt*, *ted* for the bitext corpora and *newscrawl-ja*, *news-commentary-ja*, *commoncrawl-ja*, *newscrawl-en*, *news-discussion-en*, *europarl-en*, *news-commentary-en*, *commoncrawl-en* for the monolingual corpora, and *dev* or *test* for the development and test sets.
 
     ./scripts/get_data.sh -c ted
 
