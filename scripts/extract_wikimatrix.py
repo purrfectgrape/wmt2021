@@ -26,6 +26,7 @@ import argparse
 #
 ###############################################################################
 
+
 parser = argparse.ArgumentParser(description='Tool to extract bitext from the WikiMatrix')
 parser.add_argument('--encoding', default='utf-8',
     help='character encoding for input/output')

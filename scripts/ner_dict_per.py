@@ -32,8 +32,8 @@ if args.direction == 'en-ja':
             while nl < args.nb_sents:
                 line_en = file_en.readline()
                 line_ja = file_ja.readline()
-                ner_list_en = re.findall(r'｟(.*?)｠', line_en)
-                ner_list_ja = re.findall(r'｟(.*?)｠', line_ja)
+                ner_list_en = re.findall(r'｟PERSON(.*?)｠', line_en)
+                ner_list_ja = re.findall(r'｟PERSON(.*?)｠', line_ja)
                 for ner_en in ner_list_en:
                     for ner_ja in ner_list_ja:
                         if ner_en.split('：')[0] == ner_ja.split('：')[0]:
@@ -45,8 +45,8 @@ elif args.direction == 'ja-en':
             while nl < args.nb_sents:
                 line_en = file_en.readline()
                 line_ja = file_ja.readline()
-                ner_list_en = re.findall(r'｟(.*?)｠', line_en)
-                ner_list_ja = re.findall(r'｟(.*?)｠', line_ja)
+                ner_list_en = re.findall(r'｟PERSON(.*?)｠', line_en)
+                ner_list_ja = re.findall(r'｟PERSON(.*?)｠', line_ja)
                 for ner_ja in ner_list_ja:
                     for ner_en in ner_list_en:
                         if ner_ja.split('：')[0] == ner_en.split('：')[0]:

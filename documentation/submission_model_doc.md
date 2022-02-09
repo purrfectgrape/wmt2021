@@ -108,23 +108,23 @@ ssh -L 16006:127.0.0.1:6006 gianghl2@qivalluk.linguistics.illinois.edu <br>
 tensorboard --logdir=logs/ <br>
 http://127.0.0.1:16006/ <br>
 
-## Annotate named entities in English 12.7M
-python3 scripts/ner_annotator_en.py --input=data/train/preprocessed/wmt2021-bitext-shuffled.en --output=data/train/preprocessed/wmt2021-bitext-shuffled-annotated.en --nb-sents=12718322 <br>
+## Annotate named entities in English and Japanese 12.7M
+python3 scripts/ner_annotator.py --lang=en --input=data/train/preprocessed/wmt2021-bitext-shuffled.en --output=data/train/preprocessed/wmt2021-bitext-shuffled-annotated.en --nb-sents=12718322 <br>
+python3 scripts/ner_annotator.py --lang=ja --input=data/train/preprocessed/wmt2021-bitext-shuffled.ja --output=data/train/preprocessed/wmt2021-bitext-shuffled-annotated.ja --nb-sents=12718322 <br>
+python3 scripts/ner_annotator_norm.py --lang=en --input=data/train/preprocessed/wmt2021-bitext-shuffled.en --output=data/train/preprocessed/wmt2021-bitext-shuffled-annotated-norm.en --nb-sents=12718322 <br>
+python3 scripts/ner_annotator_norm.py --lang=ja --input=data/train/preprocessed/wmt2021-bitext-shuffled.ja --output=data/train/preprocessed/wmt2021-bitext-shuffled-annotated-norm.ja --nb-sents=12718322 <br>
 
-## Annotate named entities for a smaller English data set
-python3 scripts/ner_annotator_en.py --input=/nas/models/experiment/ja-en/wmt2021/data/train/raw/sample-4m.en  --output=/nas/models/experiment/ja-en/wmt2021/data/train/raw/sample-4m-annotated.en --nb-sents=4000000
-
-Fix issues with the annotator:
-cat data/train/raw/sample-4m-annotated.en | sed 's/\(^.*｟[^｠]*\)$/\1｠/g' > checkfix
-diff -y data/train/raw/sample-4m-annotated.en checkfix --suppress-common-lines | wc -l (should return the same number of lines as in data/train/raw/sample-4m.en.errors)
-mv checkfix data/train/raw/sample-4m-annotated.en
+Fix issues with the annotator (remember to do the same for ja)
+cat data/train/preprocessed/wmt2021-bitext-shuffled-annotated.en | sed 's/^｠//g' | sed 's/\(^.*｟[^｠]*\)$/\1｠/g' > data/train/preprocessed/wmt2021-bitext-shuffled-annotated-fixed.en
+diff -y data/train/preprocessed/wmt2021-bitext-shuffled-annotated.en data/train/preprocessed/wmt2021-bitext-shuffled-annotated-fixed.en --suppress-common-lines | wc -l (should return the same number of lines as in data/train/preprocessed/wmt2021-bitext-shuffled.en.errors)
+python3 scripts/normalize_ner.py --input=data/train/preprocessed/wmt2021-bitext-shuffled-annotated-fixed.en --output=data/train/preprocessed/wmt2021-bitext-shuffled-annotated-norm.en --nb_sents=12718322
 
 ## Create file for fast_align from sentencepiece models
 spm_encode --model=sentencepiece/transformer_big.en.model --output_format=piece < data/train/preprocessed/wmt2021-bitext-shuffled.en > data/alignment/fast_align.en.sp
 spm_encode --model=sentencepiece/transformer_big.ja.model --output_format=piece < data/train/preprocessed/wmt2021-bitext-shuffled.ja > data/alignment/fast_align.ja.sp
 spm_encode --model=sentencepiece/transformer_big.ja.model  --output_format=piece < data/dev/preprocessed/newsdev2020-jaen.ja > data/alignment/dev.ja.sp
 spm_encode --model=sentencepiece/transformer_big.en.model  --output_format=piece < data/dev/preprocessed/newsdev2020-jaen.en > data/alignment/dev.en.sp 
-python3 scripts/prepare_align_bitext.py
+python3 scripts/prepare_align_bitext.py --input_en=data/alignment/fast_align.en.sp --input_ja=data/alignment/fast_align.ja.sp --output=data/alignment/fast_align.bitext.sp 
 
 ## Learn alignments with fastalign
 cd libraries/fast_align/build && cmake .. && make
@@ -134,6 +134,9 @@ cd libraries/fast_align/build && cmake .. && make
 ## Train model with alignment
 scripts/train.sh configs/transformer_big_align_ja_en.yaml 4
 
+## Train model for en>ja without politeness info
+scripts/train.sh configs/transformer_big_en_ja.yaml 7
+
 ## (Experiment) Train a small model (4m) with annotated NE in English to translate en->ja and translate
 scripts/train.sh configs/alignment_4m_en_ja_ner.yaml 7
 scripts/eval_alignment_4m_en_ja_ner.sh (remember to include --report_align in calling translate.py)
@@ -142,8 +145,69 @@ Check cat translate/alignment_4m_en_ja_ner/test.ja.hyp_alignment_4m_en_ja_ner_st
 ## Preprocess test files
 spm_encode --model=sentencepiece/transformer_big.ja.model  --output_format=piece < data/test/preprocessed/newstest2020-jaen.ja > data/test/preprocessed/newstest2020-jaen.ja.sp
 spm_encode --model=sentencepiece/transformer_big.en.model  --output_format=piece < data/test/preprocessed/newstest2020-jaen.en > data/test/preprocessed/newstest2020-jaen.en.sp
+spm_encode --model=sentencepiece/transformer_big.ja.model  --output_format=piece < data/test/preprocessed/newstest2020-enja.ja > data/test/preprocessed/newstest2020-enja.ja.sp
+spm_encode --model=sentencepiece/transformer_big.en.model  --output_format=piece < data/test/preprocessed/newstest2020-enja.en > data/test/preprocessed/newstest2020-enja.en.sp
 
+
+## Preprocess dev files for eval
+spm_encode --model=sentencepiece/transformer_big.ja.model  --output_format=piece < data/dev/preprocessed/newsdev2020-jaen.ja > data/dev/preprocessed/newsdev2020-jaen.ja.sp
+spm_encode --model=sentencepiece/transformer_big.en.model  --output_format=piece < data/dev/preprocessed/newsdev2020-jaen.en > data/dev/preprocessed/newsdev2020-jaen.en.sp
+spm_encode --model=sentencepiece/transformer_big.ja.model  --output_format=piece < data/dev/preprocessed/newsdev2020-enja.ja > data/dev/preprocessed/newsdev2020-enja.ja.sp
+spm_encode --model=sentencepiece/transformer_big.en.model  --output_format=piece < data/dev/preprocessed/newsdev2020-enja.en > data/dev/preprocessed/newsdev2020-enja.en.sp
 ## Translate and evaluation
-scripts/eval_transformer_big.sh dev
-scripts/eval_transformer_big.sh test
+scripts/eval.sh dev transformer_big 7
+scripts/eval.sh test transformer_big 7
+scripts/eval.sh dev transformer_big_align 7
+scripts/eval.sh test transformer_big_align 7
+
+## Preparing Japanese data for NE annotation
+scripts/tokenize_japanese.py --input=data/train/preprocessed/wmt2021-bitext-shuffled.ja --output=data/train/preprocessed/wmt2021-bitext-shuffled-tok.ja
+
+## Learn alignments
+python3 scripts/prepare_align_bitext.py --input_en=data/train/preprocessed/wmt2021-bitext-shuffled-annotated.en --input_ja=data/train/preprocessed/wmt2021-bitext-shuffled-tok.ja --output=data/train/preprocessed/wmt2021-bitext-shuffled-tok.bitext
+cd libraries/fast_align/build && cmake .. && make
+./fast_align -i data/train/preprocessed/wmt2021-bitext-shuffled-tok.bitext -d -o -v > //nas/models/experiment/ja-en/wmt2021/data/alignment/wmt2021-bitext-shuffled-tok-enja.align
+
+## Create a dictionary for possible NE mappings
+python3 scripts/ner_dict.py --input_ja=data/train/preprocessed/wmt2021-bitext-shuffled-annotated-fixed.ja --input_en=data/train/preprocessed/wmt2021-bitext-shuffled-annotated-fixed.en --output=data/ner_dict/ner_dict.pickle --nb_sents=12718322 --direction=en-ja
+
+python3 scripts/ner_dict.py --input_ja=data/train/preprocessed/wmt2021-bitext-shuffled-annotated-fixed.ja --input_en=data/train/preprocessed/wmt2021-bitext-shuffled-annotated-fixed.en --output=data/ner_dict/ner_dict.pickle --nb_sents=12718322 --direction=ja-en
+
+# create a dictionary map for PERSON only
+ python3 scripts/ner_dict_per.py --input_ja=data/train/preprocessed/wmt2021-bitext-shuffled-annotated-fixed.ja --input_en=data/train/preprocessed/wmt2021-bitext-shuffled-annotated-fixed.en --output=data/ner_dict/ner_dict.pickle.per --nb_sents=12718322 --direction=en-ja 
+
+
+## (Deprecated) Find the most probable translation for a given NE
+python3 scripts/find_ne_translation.py --input=data/ner_dict/ner_dict.pickle.en-ja --word='Japan'
+python3 scripts/find_ne_translation.py --input=data/ner_dict/ner_dict.pickle.ja-en --word='日本'
+
+## Create phrase tables for both directions
+python3 scripts/find_ne_translation.py --input=data/ner_dict/ner_dict.pickle.en-ja --output=data/ner_dict/phrase_table_en_ja.txt
+python3 scripts/find_ne_translation.py --input=data/ner_dict/ner_dict.pickle.ja-en --output=data/ner_dict/phrase_table_ja_en.txt
+## Create a phrase table for PERSON en->ja direction about 500k entities.
+
+## Get test data sources
+wget http://data.statmt.org/wmt21/translation-task/test-src.tgz
+tar -xf test-src.tgz
+mv test-src data/wmt2021/test/
+
+## NER correction in test data.
+python3 scripts/ner_annotator.py --lang=en --input=data/wmt2021/test/test-src/newstest2021.en-ja.en --output=data/wmt2021/test/test-src/newstest2021-norm.en-ja.en --nb_sents=1000
+spm_encode --model=sentencepiece/transformer_big.en.model --output_format=piece < data/wmt2021/test/test-src/newstest2021-annotated.en-ja.en > data/wmt2021/test/test-src/newstest2021-annotated.en-ja.en.sp
+
+
+## Get Stanford parser for dependencies
+pip3 install jpype1
+cd libraries && wget https://projects.csail.mit.edu/spatial/images/f/f8/Stanford-parser-python-r22186.tar.gz
+
+## Translating for final submission.
+scripts/generate_translations.sh
+
+## Tokenize Japanese with fugashi for bert scoring (example)
+scripts/tokenize_japanese.py --input submissions/text/en-ja-bt-pofo-02_step_210000.pt.en-ja-bt-pofo-02_step_240000.pt.en-ja-bt-pofo-02_step_250000.pt.10hyp.ja  --output submissions/fugashi/en-ja-bt-pofo-02_step_210000.pt.en-ja-bt-pofo-02_step_240000.pt.en-ja-bt-pofo-02_step_250000.pt.10hyp.ja
+
+# Run bert scoring
+sh script_japanese.sh ../submissions/fugashi/en-ja_step_300000.pt.en-ja_step_290000.pt.en-ja_step_260000.pt.10hyp.ja ../submissions/nbest/en-ja_step_300000.pt.en-ja_step_290000.pt.en-ja_step_260000.pt.10hyp.ja ../bert_japanese
+## Wrapping files in xml
+wmt-wrap -s data/wmt2021/test/test-src/newstest2021.src.ja-en.xml -t submissions/nbest/ja-en_step_300000.pt.10hyp_nest.en -n Illini -l en > submissions/final_xml/newsdev2021.ja-en_step_300000.pt.10hyp_best.en.xml
 
