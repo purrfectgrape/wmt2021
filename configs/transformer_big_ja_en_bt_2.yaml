@@ -1,24 +1,28 @@
-# Config for transformer_big ja->en.
-seed: 4444
+# Config for transformer_big ja->en with BT data.
+seed: 6031
 # Data
-save_data: models/transformer_big_align/ja-en
-src_vocab: models/transformer_big_align/ja-en.vocab.src
-tgt_vocab: models/transformer_big_align/ja-en.vocab.tgt
-overwrite: False
+save_data: models/transformer_big/ja-en-bt-2
+src_vocab: models/transformer_big/ja-en-bt-2.vocab.src
+tgt_vocab: models/transformer_big/ja-en-bt-2.vocab.tgt
+overwrite: True
 data:
       corpus_big:
-            path_src: /nas/models/experiment/ja-en/wmt2021/data/alignment/fast_align.ja.sp 
-            path_tgt: /nas/models/experiment/ja-en/wmt2021/data/alignment/fast_align.en.sp
-            path_align: /nas/models/experiment/ja-en/wmt2021/data/alignment/jaen.align
-            transforms: [filtertoolong]
-            weight: 1
+            path_src: /nas/models/experiment/ja-en/wmt2021/data/train/preprocessed/wmt2021-bitext-shuffled.ja
+            path_tgt: /nas/models/experiment/ja-en/wmt2021/data/train/preprocessed/wmt2021-bitext-shuffled.en
+            transforms: [sentencepiece, filtertoolong]
+      backtranslation:
+            path_src: data/wmt2021/mono/9M_backtrans_processed.ja
+            path_tgt: data/wmt2021/mono/9M_filtered.en
+            src_prefix: BACKTRANSLATION
+            tgt_prefix: BACKTRANSLATION
+            transforms: [filtertoolong, sentencepiece, prefix]
       valid:
-            path_src:  /nas/models/experiment/ja-en/wmt2021/data/alignment/dev.ja.sp
-            path_tgt:  /nas/models/experiment/ja-en/wmt2021/data/alignment/dev.en.sp
-            transforms: [filtertoolong]
+            path_src:  /nas/models/experiment/ja-en/wmt2021/data/dev/preprocessed/newsdev2020-jaen.ja
+            path_tgt:  /nas/models/experiment/ja-en/wmt2021/data/dev/preprocessed/newsdev2020-jaen.en
+            transforms: [sentencepiece, filtertoolong]
 # General settings
 skip_empty_level: silent
-save_model: /nas/models/experiment/ja-en/wmt2021/models/transformer_big_align/ja-en
+save_model: /nas/models/experiment/ja-en/wmt2021/models/transformer_big/ja-en-2
 src_subword_model: /nas/models/experiment/ja-en/wmt2021/sentencepiece/transformer_big.ja.model
 tgt_subword_model: /nas/models/experiment/ja-en/wmt2021/sentencepiece/transformer_big.en.model
 src_subword_type: sentencepiece
@@ -31,7 +35,7 @@ tgt_seq_length: 100
 # General opts
 save_checkpoint_steps: 10000
 valid_steps: 10000
-train_steps: 3000000
+train_steps: 1000000
 report_every: 100
 
 
@@ -76,6 +80,6 @@ attention_dropout: [0.1]
 early_stopping: 3
 
 # Visualization
-log_file: /nas/models/experiment/ja-en/wmt2021/log_file_2
+log_file: /nas/models/experiment/ja-en/wmt2021/logfiles/ja-en-bt-2
 tensorboard: true
 tensorboard_log_dir: /nas/models/experiment/ja-en/wmt2021/logs

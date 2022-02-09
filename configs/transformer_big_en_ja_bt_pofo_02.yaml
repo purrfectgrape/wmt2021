@@ -1,24 +1,30 @@
-# Config for transformer_big ja->en.
-seed: 5678
+# Config for transformer_big en->ja with BT and politeness tagged data.
+seed: 1905
 # Data
-save_data: models/transformer_big/ja-en
-src_vocab: models/transformer_big/ja-en.vocab.src
-tgt_vocab: models/transformer_big/ja-en.vocab.tgt
+save_data: models/transformer_big/en-ja-bt-pofo-02
+src_vocab: models/transformer_big/en-ja-bt-pofo-02.vocab.src
+tgt_vocab: models/transformer_big/en-ja-bt-pofo-02.vocab.tgt
 overwrite: True
 data:
       corpus_big:
-            path_src: /nas/models/experiment/ja-en/wmt2021/data/train/preprocessed/wmt2021-bitext-shuffled.ja
-            path_tgt: /nas/models/experiment/ja-en/wmt2021/data/train/preprocessed/wmt2021-bitext-shuffled.en
+            path_src: data/train/preprocessed/wmt2021-bitext-pofo-tagged.en
+            path_tgt: data/train/preprocessed/wmt2021-bitext.ja
             transforms: [sentencepiece, filtertoolong]
+            backtranslation:
+            path_src: data/wmt2021/mono/4M_subset.en
+            path_tgt: data/wmt2021/mono/4M_filtered_postprocessed.ja
+            src_prefix: BACKTRANSLATION
+            tgt_prefix: BACKTRANSLATION
+            transforms: [filtertoolong, sentencepiece, prefix]
       valid:
-            path_src:  /nas/models/experiment/ja-en/wmt2021/data/dev/preprocessed/newsdev2020-jaen.ja
-            path_tgt:  /nas/models/experiment/ja-en/wmt2021/data/dev/preprocessed/newsdev2020-jaen.en
+            path_src: data/dev/preprocessed/newsdev2020-enja-pofo-tagged.en
+            path_tgt: data/dev/preprocessed/newsdev2020-enja.ja
             transforms: [sentencepiece, filtertoolong]
 # General settings
 skip_empty_level: silent
-save_model: /nas/models/experiment/ja-en/wmt2021/models/transformer_big/ja-en
-src_subword_model: /nas/models/experiment/ja-en/wmt2021/sentencepiece/transformer_big.ja.model
-tgt_subword_model: /nas/models/experiment/ja-en/wmt2021/sentencepiece/transformer_big.en.model
+save_model: models/transformer_big/en-ja-bt-pofo-02
+src_subword_model: sentencepiece/transformer_big.en.model
+tgt_subword_model: sentencepiece/transformer_big.ja.model
 src_subword_type: sentencepiece
 tgt_subword_type: sentencepiece
 
@@ -29,7 +35,7 @@ tgt_seq_length: 100
 # General opts
 save_checkpoint_steps: 10000
 valid_steps: 10000
-train_steps: 300000
+train_steps: 1000000
 report_every: 100
 
 
@@ -74,6 +80,6 @@ attention_dropout: [0.1]
 early_stopping: 3
 
 # Visualization
-log_file: logfiles/transformer-big-ja-en
+log_file: logfiles/en-ja-bt-pofo-02
 tensorboard: true
-tensorboard_log_dir: /nas/models/experiment/ja-en/wmt2021/logs
+tensorboard_log_dir: logs
