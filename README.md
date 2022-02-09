@@ -24,6 +24,28 @@ Please note that it would take approximately 7 to 8 hours to retrieve all datase
 
     ./scripts/get_all_wmt2021.sh
 
-If you would like to retrieve individual datasets, do the following. Substitute the name of the corpus you are interested in with *paracrawl*
+If you would like to retrieve individual datasets, do the following. Substitute the name of the corpus you are interested in after the -c flag with *paracrawl*, *news-commentary*, *wikititles*, *wikimatrix*, *subtitles*, *kftt*, *ted* for the bitext corpora and *newscrawl-ja*, *news-commentary-ja*, *commoncrawl-ja*, *newscrawl-en*, *news-discussion-en*, *europarl-en*, *news-commentary-en*, *commoncrawl-en* for the monolingual corpora.
 
     ./scripts/get_data.sh -c ted
+
+## Extract sentences from each corpus
+
+### Training data
+
+    python3 scripts/extract_wikimatrix.py --threshold=1.0 --src-lang=en --trg-lang=ja --tsv=data/wmt2021/wikimatrix/WikiMatrix.v1.en-ja.langid.tsv --       bitext=data/train/raw/wikimatrix<br> 
+    python3 scripts/extract_paracrawl.py --txt data/wmt2021/paracrawl/en-ja/en-ja.bicleaner05.txt --bitext data/train/raw/paracrawl --threshold=0.730<br>
+    python3 scripts/extract_ted.py --jaen=data/wmt2021/ted/2017-01-trnted/texts/ja/en/ja-en.tgz --enja=data/wmt2021/ted/2017-01-trnted/texts/en/ja/en-ja.tgz --out_dir=data/train/raw<br>
+    python3 scripts/extract_kftt.py --in_dir=data/wmt2021/kftt/kftt-data-1.0/data --out_dir=data/train/raw (this is for orig data. for tok type, specify --type=tok)<br>
+    python3 scripts/extract_titles_newscom.py --txt=data/wmt2021/subtitles/raw/raw --bitext=data/train/raw/subtitles<br>
+    python3 scripts/extract_titles_newscom.py --txt=data/wmt2021/news-commentary/news-commentary-v16.en-ja.tsv --bitext=data/train/raw/news-commentary<br>
+    python3 scripts/extract_titles_newscom.py --txt=data/wmt2021/wikititles/wikititles-v3.ja-en.tsv --bitext=data/train/raw/wikititles<br>
+
+### Dev data
+
+    python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/dev/dev --direction=jaen --out_dir=data/dev/raw --tgt --type=dev<br>
+    python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/dev/dev --direction=jaen --out_dir=data/dev/raw --src  --type=dev<br>
+
+### Test data
+
+    python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/test/sgm --direction=jaen --out_dir=data/test/raw --tgt --type=test<br>
+    python3 scripts/extract_dev_test.py --input_dir=data/wmt2021/test/sgm --direction=jaen --out_dir=data/test/raw --src --type=test<br>
